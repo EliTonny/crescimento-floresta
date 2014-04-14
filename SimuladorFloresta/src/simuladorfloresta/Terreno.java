@@ -4,8 +4,13 @@ public class Terreno {
 
     private int XMax;
     private int YMax;
+
+    public Arvore[][] getArvores() {
+        return arvores;
+    }
     private Arvore[][] arvores;
-    private int numPosicoesDisponiveis;
+    private int numArvores;
+    private int numMaxArvores;
     private final int POSICOES_POR_METRO = 2;
 
     /**
@@ -16,7 +21,7 @@ public class Terreno {
         this.XMax = comprimento;
         this.YMax = largura;
         arvores = new Arvore[comprimento * POSICOES_POR_METRO][largura * POSICOES_POR_METRO];
-        numPosicoesDisponiveis
+        numMaxArvores
                 = largura * POSICOES_POR_METRO
                 * comprimento * POSICOES_POR_METRO;
     }
@@ -29,7 +34,7 @@ public class Terreno {
      */
     public boolean addArvore(Arvore arvore) throws Exception {
         Posicao pos;
-        if (this.numPosicoesDisponiveis == 0) {
+        if (this.numArvores == this.numMaxArvores) {
             return false;
         }
         arvore.setTerreno(this);
@@ -73,7 +78,7 @@ public class Terreno {
             }
         }
 
-        numPosicoesDisponiveis--;
+        numArvores++;
         return pos;
     }
 }
