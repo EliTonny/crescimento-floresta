@@ -1,7 +1,5 @@
 package simuladorfloresta;
 
-import java.util.Random;
-
 public class Ambiente extends Thread {
 
     private Terreno terreno;
@@ -13,7 +11,7 @@ public class Ambiente extends Thread {
     @Override
     public void run() {
         for (int i = 0; i < Gerenciador.NUM_CLICOS_DIA; i++) {
-            Arvore arvAux = null;
+            Arvore arvAux;
             for (int x = 0; x < terreno.getArvores().length; x++) {
                 for (int y = 0; y < terreno.getArvores()[x].length; y++) {
                     arvAux = terreno.getArvores()[x][y];
@@ -42,4 +40,6 @@ public class Ambiente extends Thread {
     private int getRandom(int min, int max) {
         return min + (int) (Math.random() * ((max - min) + 1));
     }
+    
+    
 }

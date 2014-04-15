@@ -1,8 +1,9 @@
 package simuladorfloresta;
 
 public class Posicao {
-   private int X;
-   private int Y;
+
+    private int X;
+    private int Y;
 
     public int getX() {
         return X;

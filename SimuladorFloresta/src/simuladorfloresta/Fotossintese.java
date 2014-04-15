@@ -5,6 +5,11 @@ import javax.swing.JOptionPane;
 public class Fotossintese extends Thread {
 
     private Terreno terreno;
+    private boolean finalizar;
+
+    public void setFinalizar(boolean finalizar) {
+        this.finalizar = finalizar;
+    }
 
     public Fotossintese(Terreno terreno) {
         this.terreno = terreno;
@@ -19,10 +24,28 @@ public class Fotossintese extends Thread {
                     for (int y = 0; y < terreno.getArvores()[x].length; y++) {
                         arvAux = terreno.getArvores()[x][y];
                         if (arvAux != null) {
-                            arvAux.retiraAgua(1);
-                            arvAux.retiraLuz(1);
-                            arvAux.retiraSaisMinerais(1);
-                            arvAux.setEnergia(1);
+                            if (arvAux.retiraAgua(100)) {
+                                if (arvAux.retiraLuz(1)) {
+                                    if (arvAux.retiraSaisMinerais(1)) {
+                                        arvAux.setEnergia(10);
+                                    } else {
+                                        arvAux.setAgua(100);
+                                        arvAux.setLuz(1);
+                                        if (this.finalizar) {
+                                            return;
+                                        }
+                                    }
+                                } else {
+                                    arvAux.setAgua(100);
+                                    if (this.finalizar) {
+                                        return;
+                                    }
+                                }
+                            } else {
+                                if (this.finalizar) {
+                                    return;
+                                }
+                            }
                         }
                     }
                 }
@@ -30,9 +53,5 @@ public class Fotossintese extends Thread {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro no run da Fotossintese");
         }
-    }
-
-    private int getRandom(int min, int max) {
-        return min + (int) (Math.random() * ((max - min) + 1));
     }
 }
