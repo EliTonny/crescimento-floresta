@@ -8,6 +8,7 @@ public class Terreno {
     private int numArvores;
     private int numMaxArvores;
     private final int POSICOES_POR_METRO = 2;
+    public static final int ARVORES_POR_METRO2 = 4;
     
     public Arvore[][] getArvores() {
         return arvores;

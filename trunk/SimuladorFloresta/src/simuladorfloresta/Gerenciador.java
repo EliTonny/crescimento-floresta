@@ -9,14 +9,18 @@ public class Gerenciador {
     Ambiente amb = new Ambiente(ter);
     Fotossintese fot = new Fotossintese(ter);
 
-    public void Iniciar(int dias) {
+    public void Iniciar(
+            int larguraTerreno,
+            int comprimentoTerreno,
+            int numArvores,
+            int dias) {
         try {
-            ter = new Terreno(10, 10);
+            ter = new Terreno(larguraTerreno, comprimentoTerreno);
 
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < numArvores; i++) {
                 if (!ter.addArvore(new ArvorePauBrasil())) {
-                    throw new Exception("Numero de arvores excede o limite permitido(" 
-                            + ter.getNumMaxArvores() 
+                    throw new Exception("Numero de arvores excede o limite permitido("
+                            + ter.getNumMaxArvores()
                             + ") para o terreno");
                 }
             }
