@@ -17,9 +17,9 @@ public abstract class Arvore {
     private Terreno terreno;
     private Posicao posicao;
     private Lock lock;
-    private Condition temAgua;
-    private Condition temLuz;
-    private Condition temSaisMinerais;
+    //private Condition temAgua;
+    //private Condition temLuz;
+    //private Condition temSaisMinerais;
     private int luzFotossintese;
     private int aguaFotossintese;
     private int saisFotossintese;
@@ -30,9 +30,9 @@ public abstract class Arvore {
                   int aguaFot, 
                   int saisFot) {
         lock = new ReentrantLock();
-        temAgua = lock.newCondition();
-        temLuz = lock.newCondition();
-        temSaisMinerais = lock.newCondition();
+        //temAgua = lock.newCondition();
+        //temLuz = lock.newCondition();
+        //temSaisMinerais = lock.newCondition();
         this.tamanhoMax = tamanhoMax;
         this.raioMax = raioMax;
         this.luzFotossintese = luzFot;
@@ -72,9 +72,9 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (agua < qtd) {
-                if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
+               // if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
-                }
+               // }
             }
             agua -= qtd;
             msg("Retirou " + qtd + " água. Total:" + agua);
@@ -92,7 +92,7 @@ public abstract class Arvore {
             //que existem outras plantas ao redor
 
             this.agua += qtd;
-            temAgua.signalAll();
+            //temAgua.signalAll();
         } finally {
             lock.unlock();
         }
@@ -102,9 +102,9 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (luz < qtd) {
-                if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
+              //  if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
-                }
+              //  }
             }
             luz -= qtd;
             msg("Retirou " + qtd + " luz. Total:" + luz);
@@ -122,7 +122,7 @@ public abstract class Arvore {
             //a planta consegue absorver considerando
             //que existem outras plantas ao redor
             this.luz += qtd;
-            temLuz.signalAll();
+            //temLuz.signalAll();
         } finally {
             lock.unlock();
         }
@@ -132,9 +132,9 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (saisMinerais < qtd) {
-                if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
+             //   if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
-                }
+              //  }
             }
             saisMinerais -= qtd;
             msg("Retirou " + qtd + " Sais. Total:" + saisMinerais);
@@ -152,7 +152,7 @@ public abstract class Arvore {
             //a planta consegue absorver considerando
             //que existem outras plantas ao redor
             this.saisMinerais += qtd;
-            temSaisMinerais.signalAll();
+            //temSaisMinerais.signalAll();
         } finally {
             lock.unlock();
         }
