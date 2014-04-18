@@ -16,26 +16,36 @@ public abstract class Arvore {
     private int raioMax;
     private Terreno terreno;
     private Posicao posicao;
-
-    public Posicao getPosicao() {
-        return posicao;
-    }
-
-    public void setPosicao(Posicao posicao) {
-        this.posicao = posicao;
-    }
     private Lock lock;
     private Condition temAgua;
     private Condition temLuz;
     private Condition temSaisMinerais;
-
-    public Arvore(int tamanhoMax, int raioMax) {
+    private int luzFotossintese;
+    private int aguaFotossintese;
+    private int saisFotossintese;
+    
+    public Arvore(int tamanhoMax, 
+                  int raioMax, 
+                  int luzFot, 
+                  int aguaFot, 
+                  int saisFot) {
         lock = new ReentrantLock();
         temAgua = lock.newCondition();
         temLuz = lock.newCondition();
         temSaisMinerais = lock.newCondition();
         this.tamanhoMax = tamanhoMax;
         this.raioMax = raioMax;
+        this.luzFotossintese = luzFot;
+        this.aguaFotossintese = aguaFot;
+        this.saisFotossintese = saisFot;
+    }
+    
+    public Posicao getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(Posicao posicao) {
+        this.posicao = posicao;
     }
 
     public Terreno getTerreno() {
@@ -44,6 +54,18 @@ public abstract class Arvore {
 
     public void setTerreno(Terreno terreno) {
         this.terreno = terreno;
+    }
+
+    public int getLuzFotossintese() {
+        return luzFotossintese;
+    }
+
+    public int getAguaFotossintese() {
+        return aguaFotossintese;
+    }
+
+    public int getSaisFotossintese() {
+        return saisFotossintese;
     }
 
     public boolean retiraAgua(int qtd) throws Exception {
@@ -158,6 +180,7 @@ public abstract class Arvore {
         saida += "Agua:" + this.agua + "\n";
         saida += "Luz:" + this.luz + "\n";
         saida += "Sais:" + this.saisMinerais + "\n";
+        saida += "Energia:" + this.energia + "\n";
         return saida;
     }
 }
