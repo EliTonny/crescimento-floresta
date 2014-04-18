@@ -13,7 +13,7 @@ public class Gerenciador {
         try {
             ter = new Terreno(10, 10);
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1; i++) {
                 if (!ter.addArvore(new ArvorePauBrasil())) {
                     throw new Exception("Numero de arvores excede o limite permitido(" 
                             + ter.getNumMaxArvores() 
@@ -25,7 +25,7 @@ public class Gerenciador {
                 ProximoDia();
                 System.out.println("Dia " + (i + 1));
             }
-            System.out.println("Processo finalizado.");
+            System.out.println("Processo finalizado.\n");
             System.out.println(ter.ImprimeDados());
 
         } catch (Exception ex) {
@@ -41,6 +41,7 @@ public class Gerenciador {
         fot.start();
 
         amb.join();
+        Thread.sleep(1);
         fot.setFinalizar(true);
         fot.join();
     }

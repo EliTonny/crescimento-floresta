@@ -4,19 +4,19 @@ public class Terreno {
 
     private int XMax;
     private int YMax;
-
-    public Arvore[][] getArvores() {
-        return arvores;
-    }
     private Arvore[][] arvores;
     private int numArvores;
     private int numMaxArvores;
+    private final int POSICOES_POR_METRO = 2;
+    
+    public Arvore[][] getArvores() {
+        return arvores;
+    }
 
     public int getNumMaxArvores() {
         return numMaxArvores;
     }
-    private final int POSICOES_POR_METRO = 2;
-
+    
     /**
      * @param largura Largura do terreno em metros
      * @param comprimento comprimento do terreno em metros
@@ -31,7 +31,7 @@ public class Terreno {
     }
 
     /**
-     * Adiciona uma arvore em uma posição aleattória do terreno
+     * Adiciona uma arvore em uma posição aleatória do terreno
      *
      * @return Retorna false se não houver mais espaço no terreno
      *
@@ -66,8 +66,10 @@ public class Terreno {
         for (int x = XAleatorio; x < this.XMax * POSICOES_POR_METRO; x++) {
             for (int y = YAleatorio; y < this.YMax * POSICOES_POR_METRO; y++) {
                 if (arvores[x][y] == null) {
+                    numArvores++;
                     pos = new Posicao(x, y);
-                    break;
+                    return pos;
+ 
                 }
             }
         }
@@ -75,14 +77,13 @@ public class Terreno {
             for (int x = 0; x < this.XMax * POSICOES_POR_METRO; x++) {
                 for (int y = 0; y < this.YMax * POSICOES_POR_METRO; y++) {
                     if (arvores[x][y] == null) {
+                        numArvores++;
                         pos = new Posicao(x, y);
-                        break;
+                        return pos;
                     }
                 }
             }
         }
-
-        numArvores++;
         return pos;
     }
     

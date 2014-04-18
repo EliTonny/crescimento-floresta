@@ -7,8 +7,8 @@ public class Fotossintese extends Thread {
     private Terreno terreno;
     private boolean finalizar;
     private final int QTD_AGUA = 6;
-    private final int QTD_LUZ = 6;
-    private final int QTD_SAIS = 6;
+    private final int QTD_LUZ = 8;
+    private final int QTD_SAIS = 4;
 
     public void setFinalizar(boolean finalizar) {
         this.finalizar = finalizar;
@@ -21,30 +21,14 @@ public class Fotossintese extends Thread {
     @Override
     public void run() {
         try {
+            Arvore arv;
             for (int i = 0; i < Gerenciador.NUM_CLICOS_DIA; i++) {
-                Arvore arvAux;
+                arv = null;
                 for (int x = 0; x < terreno.getArvores().length; x++) {
                     for (int y = 0; y < terreno.getArvores()[x].length; y++) {
-                        arvAux = terreno.getArvores()[x][y];
-                        if (arvAux != null) {
-                            if (arvAux.retiraAgua(QTD_AGUA)) {
-                                if (arvAux.retiraLuz(QTD_LUZ)) {
-                                    if (arvAux.retiraSaisMinerais(QTD_SAIS)) {
-                                        arvAux.setEnergia(10);
-                                    } else {
-                                        arvAux.setAgua(QTD_AGUA);
-                                        arvAux.setLuz(QTD_LUZ);
-                                        if (this.finalizar) {
-                                            return;
-                                        }
-                                    }
-                                } else {
-                                    arvAux.setAgua(QTD_AGUA);
-                                    if (this.finalizar) {
-                                        return;
-                                    }
-                                }
-                            } else {
+                        arv = terreno.getArvores()[x][y];
+                        if (arv != null) {
+                            if (!Fotossintese(arv)) {
                                 if (this.finalizar) {
                                     return;
                                 }
@@ -56,5 +40,26 @@ public class Fotossintese extends Thread {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro no run da Fotossintese");
         }
+    }
+
+    private boolean Fotossintese(Arvore arv) throws Exception {
+        boolean sucesso = true;
+        if (arv.retiraAgua(arv.getAguaFotossintese())) {
+            if (arv.retiraLuz(arv.getLuzFotossintese())) {
+                if (arv.retiraSaisMinerais(arv.getSaisFotossintese())) {
+                    arv.setEnergia(10);
+                } else {
+                    arv.setAgua(arv.getAguaFotossintese());
+                    arv.setLuz(arv.getLuzFotossintese());
+                    sucesso = false;
+                }
+            } else {
+                arv.setAgua(arv.getAguaFotossintese());
+                sucesso = false;
+            }
+        } else {
+            sucesso = false;
+        }
+        return sucesso;
     }
 }
