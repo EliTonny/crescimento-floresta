@@ -11,6 +11,10 @@ public class Terreno {
     private Arvore[][] arvores;
     private int numArvores;
     private int numMaxArvores;
+
+    public int getNumMaxArvores() {
+        return numMaxArvores;
+    }
     private final int POSICOES_POR_METRO = 2;
 
     /**
@@ -80,5 +84,21 @@ public class Terreno {
 
         numArvores++;
         return pos;
+    }
+    
+    public String ImprimeDados()
+    {
+        String saida = "";
+        for (int x = 0; x < this.XMax * POSICOES_POR_METRO; x++) {
+            for (int y = 0; y < this.YMax * POSICOES_POR_METRO; y++) {
+                if (arvores[x][y] != null) {
+                    saida += "X: " + x + " Y:" + y;
+                    saida += "\n";
+                    saida += arvores[x][y].ImprimeDado();
+                    saida += "\n";
+                }
+            }
+        }
+        return saida;
     }
 }

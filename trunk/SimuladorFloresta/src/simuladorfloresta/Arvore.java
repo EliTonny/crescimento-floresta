@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class Arvore {
     
-    private final int TEMPO_ESPERA = 1;
+    private final int TEMPO_ESPERA = 0;
     private int agua;
     private int luz;
     private int saisMinerais;
@@ -50,7 +50,7 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (agua < qtd) {
-                if (!temAgua.await(TEMPO_ESPERA, TimeUnit.SECONDS)) {
+                if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
                 }
             }
@@ -80,7 +80,7 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (luz < qtd) {
-                if (!temLuz.await(TEMPO_ESPERA, TimeUnit.SECONDS)) {
+                if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
                 }
             }
@@ -110,7 +110,7 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (saisMinerais < qtd) {
-                if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.SECONDS)) {
+                if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
                 }
             }
@@ -150,7 +150,7 @@ public abstract class Arvore {
     }
 
     private void msg(String msg) {
-        System.out.println(msg);
+        //System.out.println(msg);
     }
 
     public String ImprimeDado() {
