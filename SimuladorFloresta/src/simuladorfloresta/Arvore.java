@@ -1,5 +1,6 @@
 package simuladorfloresta;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -12,7 +13,7 @@ public abstract class Arvore {
     private int luz;
     private int saisMinerais;
     private int energia;
-    private int tamanhoMax;
+    private int tamanho;
     private int raioMax;
     private Terreno terreno;
     private Posicao posicao;
@@ -23,6 +24,7 @@ public abstract class Arvore {
     private int luzFotossintese;
     private int aguaFotossintese;
     private int saisFotossintese;
+    private ArrayList<Galho> galhos;
     
     public Arvore(int tamanhoMax, 
                   int raioMax, 
@@ -33,11 +35,12 @@ public abstract class Arvore {
         //temAgua = lock.newCondition();
         //temLuz = lock.newCondition();
         //temSaisMinerais = lock.newCondition();
-        this.tamanhoMax = tamanhoMax;
+        this.tamanho = tamanhoMax;
         this.raioMax = raioMax;
         this.luzFotossintese = luzFot;
         this.aguaFotossintese = aguaFot;
         this.saisFotossintese = saisFot;
+        this.galhos = new ArrayList();
     }
     
     public Posicao getPosicao() {
@@ -182,5 +185,26 @@ public abstract class Arvore {
         saida += "Sais:" + this.saisMinerais + "\n";
         saida += "Energia:" + this.energia + "\n";
         return saida;
+    }
+    
+    public void crescer() throws Exception{
+        if(this.energia >= 20){
+            for (Galho galho : galhos) {
+                if(galho.addFolha()){
+                    this.retiraEnergia(20);
+                    break;
+                }
+            }
+        }
+        
+        if(this.energia >= 50){
+            galhos.add(new Galho(20));
+            this.retiraEnergia(50);
+        }
+        
+        if(this.energia >= 10){
+            this.tamanho++;
+            this.retiraEnergia(10);
+        }
     }
 }
