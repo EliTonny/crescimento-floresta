@@ -5,9 +5,22 @@ import javax.swing.JOptionPane;
 public class Gerenciador {
 
     public static final int NUM_CLICOS_DIA = 50;
-    Terreno ter = new Terreno(1, 1);
-    Ambiente amb = new Ambiente(ter);
-    Fotossintese fot = new Fotossintese(ter);
+    public static Gerenciador instancia;
+    private Terreno ter;
+    private Ambiente amb;
+    private Fotossintese fot;
+    private int larguraTerreno;
+    private int comprimentoTerreno;
+
+    public static Gerenciador getinstancia() {
+        if(instancia == null){
+            instancia = new Gerenciador();
+        }
+        return instancia;
+    }
+    
+    private Gerenciador(){
+    }
 
     public void Iniciar(
             int larguraTerreno,
@@ -15,7 +28,12 @@ public class Gerenciador {
             int numArvores,
             int dias) {
         try {
-            ter = new Terreno(larguraTerreno, comprimentoTerreno);
+            this.larguraTerreno = larguraTerreno;
+            this.comprimentoTerreno = comprimentoTerreno;
+            
+            ter = Terreno.getInstancia();
+            amb = new Ambiente(ter);
+            fot = new Fotossintese(ter);
 
             for (int i = 0; i < numArvores; i++) {
                 if (!ter.addArvore(new ArvorePauBrasil())) {
@@ -48,5 +66,13 @@ public class Gerenciador {
         Thread.sleep(1);
         fot.setFinalizar(true);
         fot.join();
+    }
+
+    public int getLarguraTerreno() {
+        return larguraTerreno;
+    }
+
+    public int getComprimentoTerreno() {
+        return comprimentoTerreno;
     }
 }

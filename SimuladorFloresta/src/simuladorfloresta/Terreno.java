@@ -10,6 +10,15 @@ public class Terreno {
     private final int POSICOES_POR_METRO = 2;
     public static final int ARVORES_POR_METRO2 = 4;
     
+    private static Terreno instancia;
+
+    public static Terreno getInstancia() {
+        if(instancia == null){
+            instancia = new Terreno(Gerenciador.getinstancia().getLarguraTerreno(), Gerenciador.getinstancia().getComprimentoTerreno());
+        }
+        return instancia;
+    }
+    
     public Arvore[][] getArvores() {
         return arvores;
     }
@@ -22,7 +31,7 @@ public class Terreno {
      * @param largura Largura do terreno em metros
      * @param comprimento comprimento do terreno em metros
      */
-    public Terreno(int largura, int comprimento) {
+    private Terreno(int largura, int comprimento) {
         this.XMax = comprimento;
         this.YMax = largura;
         arvores = new Arvore[comprimento * POSICOES_POR_METRO][largura * POSICOES_POR_METRO];
