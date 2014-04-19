@@ -1,8 +1,6 @@
 package simuladorfloresta;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -187,7 +185,7 @@ public abstract class Arvore {
         return saida;
     }
     
-    public void crescer() throws Exception{
+    /*public void crescer() throws Exception{
         if(this.energia >= 20){
             for (Galho galho : galhos) {
                 if(galho.addFolha()){
@@ -206,5 +204,5 @@ public abstract class Arvore {
             this.tamanho++;
             this.retiraEnergia(10);
         }
-    }
+    }*/
 }
