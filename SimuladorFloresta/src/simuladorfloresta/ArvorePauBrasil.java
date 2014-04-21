@@ -8,6 +8,6 @@ public class ArvorePauBrasil extends Arvore {
     //   uma factory
     
     public ArvorePauBrasil() {
-        super(30,6, 7, 6, 5);
+        super(30,6, 7, 6, 5,EtapaProcesso.ADULTA);
     }
 }

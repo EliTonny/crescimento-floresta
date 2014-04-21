@@ -23,12 +23,15 @@ public abstract class Arvore {
     private int aguaFotossintese;
     private int saisFotossintese;
     private ArrayList<Galho> galhos;
+    public enum EtapaProcesso{SEMENTE, BROTO, ADULTA, REPRODUCAO};
+    private EtapaProcesso etapa;
     
     public Arvore(int tamanhoMax, 
                   int raioMax, 
                   int luzFot, 
                   int aguaFot, 
-                  int saisFot) {
+                  int saisFot,
+                  EtapaProcesso etapa) {
         lock = new ReentrantLock();
         //temAgua = lock.newCondition();
         //temLuz = lock.newCondition();
@@ -39,10 +42,15 @@ public abstract class Arvore {
         this.aguaFotossintese = aguaFot;
         this.saisFotossintese = saisFot;
         this.galhos = new ArrayList();
+        this.etapa = etapa;
     }
     
     public Posicao getPosicao() {
         return posicao;
+    }
+    
+    public EtapaProcesso getEtapa(){
+        return etapa;
     }
 
     public void setPosicao(Posicao posicao) {
@@ -160,18 +168,23 @@ public abstract class Arvore {
     }
 
     public synchronized void retiraEnergia(int qtd) throws Exception {
-        while (energia < qtd) {
+        /*while (energia < qtd) {
             wait();
-        }
+        }*/
+        
         energia -= qtd;
         msg("Retirou " + qtd + " energia. Total:" + energia);
     }
 
     public synchronized void setEnergia(int qtd) {
         this.energia += qtd;
-        notifyAll();
+        //notifyAll();
     }
 
+    public int getEnergia() {
+        return energia;
+    }
+    
     private void msg(String msg) {
         //System.out.println(msg);
     }
