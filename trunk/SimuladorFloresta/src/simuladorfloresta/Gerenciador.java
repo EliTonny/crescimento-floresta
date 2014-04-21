@@ -1,6 +1,7 @@
 package simuladorfloresta;
 
 import javax.swing.JOptionPane;
+import simuladorfloresta.etapasCiclo.Morte;
 
 public class Gerenciador {
 
@@ -66,6 +67,16 @@ public class Gerenciador {
         Thread.sleep(1);
         fot.setFinalizar(true);
         fot.join();
+        
+        Armazem armMorte = new Armazem(ter.getArvoresEtapa());
+        
+        Morte morte1 = new Morte(armMorte);
+        Morte morte2 = new Morte(armMorte);
+        Morte morte3 = new Morte(armMorte);
+        
+        morte1.start();
+        morte2.start();
+        morte3.start();
     }
 
     public int getLarguraTerreno() {

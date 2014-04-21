@@ -1,5 +1,8 @@
 package simuladorfloresta;
 
+import java.util.ArrayList;
+import simuladorfloresta.Arvore.EtapaProcesso;
+
 public class Terreno {
 
     private int XMax;
@@ -112,4 +115,25 @@ public class Terreno {
         }
         return saida;
     }
+    
+    public Arvore[] getArvoresEtapa(EtapaProcesso etapa){
+        ArrayList<Arvore> arvoresRetorno = new ArrayList();
+        for (int i = 0; i < arvores.length; i++) {
+            for (int j = 0; j < arvores[0].length; j++) {
+                if(arvores[i][j].getEtapa() == etapa)
+                    arvoresRetorno.add(arvores[i][j]);
+            }
+        }
+        return (Arvore[]) arvoresRetorno.toArray();
+    }
+    
+    public Arvore[] getArvoresEtapa(){
+        ArrayList<Arvore> arvoresRetorno = new ArrayList();
+        for (int i = 0; i < arvores.length; i++) {
+            for (int j = 0; j < arvores[0].length; j++) {
+                arvoresRetorno.add(arvores[i][j]);
+            }
+        }
+        return (Arvore[]) arvoresRetorno.toArray();
+    }    
 }
