@@ -115,8 +115,8 @@ public class Terreno {
         }
         return saida;
     }
-
-    public Arvore[] getArvoresEtapa(EtapaProcesso etapa) {
+    
+    public ArrayList<Arvore> getArvoresEtapa(EtapaProcesso etapa){
         ArrayList<Arvore> arvoresRetorno = new ArrayList();
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[0].length; j++) {
@@ -125,15 +125,10 @@ public class Terreno {
                 }
             }
         }
-        Object[] objs = arvoresRetorno.toArray();
-        Arvore[] arv1 = new Arvore[objs.length];
-        for (int i = 0; i < objs.length; i++) {
-            arv1[i] = (Arvore) objs[i];
-        }
-        return arv1;
+        return arvoresRetorno;
     }
-
-    public Arvore[] getArvoresEtapa() {
+    
+    public ArrayList<Arvore> getArvoresEtapa(){
         ArrayList<Arvore> arvoresRetorno = new ArrayList();
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[0].length; j++) {
@@ -142,11 +137,6 @@ public class Terreno {
                 }
             }
         }
-        Object[] objs = arvoresRetorno.toArray();
-        Arvore[] arv1 = new Arvore[objs.length];
-        for (int i = 0; i < objs.length; i++) {
-            arv1[i] = (Arvore) objs[i];
-        }
-        return arv1;
+        return arvoresRetorno;
     }
 }

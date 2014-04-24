@@ -1,5 +1,6 @@
 package simuladorfloresta;
 
+import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
 
@@ -11,9 +12,9 @@ public class Armazem {
         private Semaphore acesso;
         private Semaphore haElementos;
 	
-	public Armazem(Object[] obj) {
-		this.tam = obj.length;
-                arm = obj.clone();
+	public Armazem(ArrayList lista) {
+		this.tam = lista.size();
+                arm = lista.toArray();
                 acesso = new Semaphore(1);
                 haElementos = new Semaphore(tam);
 	}
