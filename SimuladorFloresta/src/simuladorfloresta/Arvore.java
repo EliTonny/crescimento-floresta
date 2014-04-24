@@ -13,6 +13,7 @@ public abstract class Arvore {
     private int luz;
     private int saisMinerais;
     private int energia;
+    private int tamanhoMax;
     private int tamanho;
     private int raioMax;
     private Terreno terreno;
@@ -37,7 +38,7 @@ public abstract class Arvore {
         temAgua = lock.newCondition();
         temLuz = lock.newCondition();
         temSaisMinerais = lock.newCondition();
-        this.tamanho = tamanhoMax;
+        this.tamanhoMax = tamanhoMax;
         this.raioMax = raioMax;
         this.luzFotossintese = luzFot;
         this.aguaFotossintese = aguaFot;
@@ -199,6 +200,8 @@ public abstract class Arvore {
         return saida;
     }
     
+    
+    
     /*public void crescer() throws Exception{
         if(this.energia >= 20){
             for (Galho galho : galhos) {
@@ -219,4 +222,17 @@ public abstract class Arvore {
             this.retiraEnergia(10);
         }
     }*/
+
+    public int getTamanho() {
+        return tamanho;
+    }
+    
+    public boolean setTamanho(int tamanho){
+        if(this.tamanho >= this.tamanhoMax)
+            return false;
+        this.tamanho+= tamanho;
+        if(this.tamanho > this.tamanhoMax)
+            this.tamanho = this.tamanhoMax;
+        return true;
+    }
 }

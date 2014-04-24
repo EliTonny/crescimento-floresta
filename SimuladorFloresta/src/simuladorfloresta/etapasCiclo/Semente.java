@@ -1,16 +1,34 @@
 package simuladorfloresta.etapasCiclo;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
 
-public class Semente extends Thread implements Etapa{
+public class Semente extends Etapa{
+
+    public Semente(Armazem armazem) {
+        super(armazem);
+    }
 
     @Override
     public void executar(Arvore arvore) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public void run(){
+        if(arvore == null)
+            return;
         
+        try {
+            if(arvore.retiraSaisMinerais(10)){
+                if(arvore.retiraAgua(10)){
+                    if(!arvore.setTamanho(1)){
+                        arvore.setSaisMinerais(10);
+                        arvore.setAgua(10);
+                    }
+                } else{
+                    arvore.setSaisMinerais(10);
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(Semente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
