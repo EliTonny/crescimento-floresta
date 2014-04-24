@@ -71,13 +71,13 @@ public class Gerenciador {
         
         Armazem armMorte = new Armazem(ter.getArvoresEtapa());
         
-        /*Morte morte1 = new Morte(armMorte);
+        Morte morte1 = new Morte(armMorte);
         Morte morte2 = new Morte(armMorte);
         Morte morte3 = new Morte(armMorte);
         
         morte1.start();
         morte2.start();
-        morte3.start();*/
+        morte3.start();
     }
 
     public int getLarguraTerreno() {
