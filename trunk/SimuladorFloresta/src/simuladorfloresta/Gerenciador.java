@@ -33,6 +33,7 @@ public class Gerenciador {
             this.comprimentoTerreno = comprimentoTerreno;
             
             ter = Terreno.getInstancia();
+            ter.Inicializa(larguraTerreno, comprimentoTerreno);
             amb = new Ambiente(ter);
             fot = new Fotossintese(ter);
 
