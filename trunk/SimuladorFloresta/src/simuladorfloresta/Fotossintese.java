@@ -6,9 +6,6 @@ public class Fotossintese extends Thread {
 
     private Terreno terreno;
     private boolean finalizar;
-    private final int QTD_AGUA = 6;
-    private final int QTD_LUZ = 8;
-    private final int QTD_SAIS = 4;
 
     public void setFinalizar(boolean finalizar) {
         this.finalizar = finalizar;

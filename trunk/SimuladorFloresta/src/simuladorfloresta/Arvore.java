@@ -1,6 +1,8 @@
 package simuladorfloresta;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -16,26 +18,25 @@ public abstract class Arvore {
     private Terreno terreno;
     private Posicao posicao;
     private Lock lock;
-    //private Condition temAgua;
-    //private Condition temLuz;
-    //private Condition temSaisMinerais;
+    private Condition temAgua;
+    private Condition temLuz;
+    private Condition temSaisMinerais;
     private int luzFotossintese;
     private int aguaFotossintese;
     private int saisFotossintese;
     private ArrayList<Galho> galhos;
-    public enum EtapaProcesso{SEMENTE, BROTO, ADULTA, REPRODUCAO};
-    private EtapaProcesso etapa;
+    private EnumEtapaProcesso etapa;
     
     public Arvore(int tamanhoMax, 
                   int raioMax, 
                   int luzFot, 
                   int aguaFot, 
                   int saisFot,
-                  EtapaProcesso etapa) {
+                  EnumEtapaProcesso etapa) {
         lock = new ReentrantLock();
-        //temAgua = lock.newCondition();
-        //temLuz = lock.newCondition();
-        //temSaisMinerais = lock.newCondition();
+        temAgua = lock.newCondition();
+        temLuz = lock.newCondition();
+        temSaisMinerais = lock.newCondition();
         this.tamanho = tamanhoMax;
         this.raioMax = raioMax;
         this.luzFotossintese = luzFot;
@@ -49,7 +50,7 @@ public abstract class Arvore {
         return posicao;
     }
     
-    public EtapaProcesso getEtapa(){
+    public EnumEtapaProcesso getEtapa(){
         return etapa;
     }
 
@@ -81,9 +82,9 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (agua < qtd) {
-               // if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
+                if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
-               // }
+                }
             }
             agua -= qtd;
             msg("Retirou " + qtd + " água. Total:" + agua);
@@ -101,7 +102,7 @@ public abstract class Arvore {
             //que existem outras plantas ao redor
 
             this.agua += qtd;
-            //temAgua.signalAll();
+            temAgua.signalAll();
         } finally {
             lock.unlock();
         }
@@ -111,9 +112,9 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (luz < qtd) {
-              //  if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
+                if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
-              //  }
+                }
             }
             luz -= qtd;
             msg("Retirou " + qtd + " luz. Total:" + luz);
@@ -131,7 +132,7 @@ public abstract class Arvore {
             //a planta consegue absorver considerando
             //que existem outras plantas ao redor
             this.luz += qtd;
-            //temLuz.signalAll();
+            temLuz.signalAll();
         } finally {
             lock.unlock();
         }
@@ -141,9 +142,9 @@ public abstract class Arvore {
         lock.lock();
         try {
             while (saisMinerais < qtd) {
-             //   if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
+                if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
                     return false;
-              //  }
+                }
             }
             saisMinerais -= qtd;
             msg("Retirou " + qtd + " Sais. Total:" + saisMinerais);
@@ -161,7 +162,7 @@ public abstract class Arvore {
             //a planta consegue absorver considerando
             //que existem outras plantas ao redor
             this.saisMinerais += qtd;
-            //temSaisMinerais.signalAll();
+            temSaisMinerais.signalAll();
         } finally {
             lock.unlock();
         }
@@ -189,7 +190,7 @@ public abstract class Arvore {
         //System.out.println(msg);
     }
 
-    public String ImprimeDado() {
+    public String ImprimeDados() {
         String saida = "";
         saida += "Agua:" + this.agua + "\n";
         saida += "Luz:" + this.luz + "\n";
