@@ -1,7 +1,8 @@
 package simuladorfloresta;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import simuladorfloresta.Arvore.EtapaProcesso;
+import java.util.Queue;
 
 public class Terreno {
 
@@ -13,7 +14,12 @@ public class Terreno {
     private final int POSICOES_POR_METRO = 2;
     public static final int ARVORES_POR_METRO2 = 4;
     private static Terreno instancia;
+    private Queue<Arvore> ArvoreAmbiente;
+    private Queue<Arvore> ArvoreFotossintese;
+    private Queue<Arvore> ArvoreCicloVida;
 
+    
+    
     public static Terreno getInstancia() {
         if (instancia == null) {
             instancia = new Terreno();
@@ -42,6 +48,40 @@ public class Terreno {
                 * comprimento * POSICOES_POR_METRO;
 
         numArvores = 0;
+        ArvoreAmbiente = new ArrayDeque<>();
+        ArvoreFotossintese = new ArrayDeque<>();
+        ArvoreCicloVida = new ArrayDeque<>();
+    }
+
+    //Depois de processar a arvore, faz um setArvoreFotossintese
+    public Arvore retiraArvoreAmbiente() {
+        //if Nao temArvoreAmbiente então wait
+
+        return ArvoreAmbiente.poll();
+    }
+
+    public void setArvoreAmbiente(Arvore arvore) {
+        ArvoreAmbiente.add(arvore);
+        // notify
+    }
+
+    //Depois de processar a arvore, faz um setArvoreAmbiente e um setArvoreCicloVida
+    public Arvore retiraArvoreFotossintese() {
+        //if Nao temArvoreFotossintese então wait
+        return ArvoreFotossintese.poll();
+    }
+
+    public void setArvoreFotossintese(Arvore arvore) {
+        ArvoreFotossintese.add(arvore);
+    }
+
+    public Arvore retiraArvoreCicloVida(EnumEtapaProcesso tipo) {
+        //if Nao temArvoreCicloVida então wait
+        return null;
+    }
+
+    public void setArvoreCicloVida(Arvore arvore) {
+        //notify
     }
 
     /**
@@ -108,15 +148,15 @@ public class Terreno {
                 if (arvores[x][y] != null) {
                     saida += "X: " + x + " Y:" + y;
                     saida += "\n";
-                    saida += arvores[x][y].ImprimeDado();
+                    saida += arvores[x][y].ImprimeDados();
                     saida += "\n";
                 }
             }
         }
         return saida;
     }
-    
-    public ArrayList<Arvore> getArvoresEtapa(EtapaProcesso etapa){
+
+    public ArrayList<Arvore> getArvoresEtapa(EnumEtapaProcesso etapa) {
         ArrayList<Arvore> arvoresRetorno = new ArrayList();
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[0].length; j++) {
@@ -127,8 +167,8 @@ public class Terreno {
         }
         return arvoresRetorno;
     }
-    
-    public ArrayList<Arvore> getArvoresEtapa(){
+
+    public ArrayList<Arvore> getArvoresEtapa() {
         ArrayList<Arvore> arvoresRetorno = new ArrayList();
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[0].length; j++) {
