@@ -3,6 +3,12 @@ package simuladorfloresta;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Terreno {
 
@@ -10,16 +16,22 @@ public class Terreno {
     private int YMax;
     private Arvore[][] arvores;
     private int numArvores;
+
+    public int getNumArvores() {
+        return numArvores;
+    }
     private int numMaxArvores;
     private final int POSICOES_POR_METRO = 2;
     public static final int ARVORES_POR_METRO2 = 4;
     private static Terreno instancia;
     private Queue<Arvore> ArvoreAmbiente;
     private Queue<Arvore> ArvoreFotossintese;
-    private Queue<Arvore> ArvoreCicloVida;
+    private Lock lockAmbiente;
+    private Condition condHasArvoreAmbiente;
+    private Lock lockFotossintese;
+    private Condition condHasArvoreFotossintese;
+    private AtomicBoolean finalizar;
 
-    
-    
     public static Terreno getInstancia() {
         if (instancia == null) {
             instancia = new Terreno();
@@ -40,48 +52,84 @@ public class Terreno {
      * @param largura Largura do terreno em metros
      * @param comprimento comprimento do terreno em metros
      */
-    public void Inicializa(int largura, int comprimento) {
+    public void Inicializa(int largura, int comprimento, AtomicBoolean finalizar) {
         this.XMax = comprimento;
         this.YMax = largura;
         arvores = new Arvore[comprimento * POSICOES_POR_METRO][largura * POSICOES_POR_METRO];
         numMaxArvores = largura * POSICOES_POR_METRO
                 * comprimento * POSICOES_POR_METRO;
-
+        this.finalizar = finalizar;
         numArvores = 0;
         ArvoreAmbiente = new ArrayDeque<>();
         ArvoreFotossintese = new ArrayDeque<>();
-        ArvoreCicloVida = new ArrayDeque<>();
+        lockAmbiente = new ReentrantLock();
+        condHasArvoreAmbiente = lockAmbiente.newCondition();
+        lockFotossintese = new ReentrantLock();
+        condHasArvoreFotossintese = lockFotossintese.newCondition();
+
+        /*for (int x = 0; x < this.arvores.length; x++) {
+         for (int y = 0; y < this.arvores[x].length; y++) {
+         if (arvores[x][y] != null) {
+         ArvoreAmbiente.add(arvores[x][y]);
+         }
+         }
+         }*/
     }
 
     //Depois de processar a arvore, faz um setArvoreFotossintese
-    public Arvore retiraArvoreAmbiente() {
+    public Arvore retiraArvoreAmbiente() throws InterruptedException {
         //if Nao temArvoreAmbiente então wait
-
-        return ArvoreAmbiente.poll();
+        lockAmbiente.lock();
+        try {
+            while (ArvoreAmbiente.isEmpty()) {
+                if (!condHasArvoreAmbiente.await(1, TimeUnit.SECONDS)) {
+                    //System.out.println("Saiu do retiraArvoreAmbiente");
+                    return null;
+                }
+            }
+            return ArvoreAmbiente.poll();
+        } finally {
+            lockAmbiente.unlock();
+        }
     }
 
     public void setArvoreAmbiente(Arvore arvore) {
-        ArvoreAmbiente.add(arvore);
-        // notify
+        lockAmbiente.lock();
+        try {
+            ArvoreAmbiente.add(arvore);
+            condHasArvoreAmbiente.signalAll();
+        } finally {
+            lockAmbiente.unlock();
+        }
     }
 
     //Depois de processar a arvore, faz um setArvoreAmbiente e um setArvoreCicloVida
-    public Arvore retiraArvoreFotossintese() {
-        //if Nao temArvoreFotossintese então wait
-        return ArvoreFotossintese.poll();
+    public Arvore retiraArvoreFotossintese() throws InterruptedException {
+        lockFotossintese.lock();
+        try {
+            while (ArvoreFotossintese.isEmpty()) {
+                if (finalizar.get()) {
+                    return null;
+                }
+                if (!condHasArvoreFotossintese.await(200, TimeUnit.MILLISECONDS)) {
+                    return null;
+                }
+                //condHasArvoreFotossintese.await();
+            }
+            return ArvoreFotossintese.poll();
+        } finally {
+            lockFotossintese.unlock();
+        }
     }
 
     public void setArvoreFotossintese(Arvore arvore) {
-        ArvoreFotossintese.add(arvore);
-    }
-
-    public Arvore retiraArvoreCicloVida(EnumEtapaProcesso tipo) {
-        //if Nao temArvoreCicloVida então wait
-        return null;
-    }
-
-    public void setArvoreCicloVida(Arvore arvore) {
-        //notify
+        lockFotossintese.lock();
+        try {
+            ArvoreFotossintese.add(arvore);
+            condHasArvoreFotossintese.signalAll();
+        } finally {
+            lockFotossintese.unlock();
+        }
     }
 
     /**
@@ -99,6 +147,8 @@ public class Terreno {
         pos = this.procuraPosicaoAleatoria();
         arvore.setPosicao(pos);
         arvores[pos.getX()][pos.getY()] = arvore;
+
+        ArvoreAmbiente.add(arvore);
         return true;
     }
 
