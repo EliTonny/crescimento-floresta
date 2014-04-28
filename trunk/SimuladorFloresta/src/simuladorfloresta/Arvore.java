@@ -51,6 +51,10 @@ public abstract class Arvore {
         return posicao;
     }
 
+    public void setEtapa(EnumEtapaProcesso etapa) {
+        this.etapa = etapa;
+    }
+
     public EnumEtapaProcesso getEtapa() {
         return etapa;
     }
@@ -261,5 +265,14 @@ public abstract class Arvore {
         } finally {
             lock.unlock();
         }
+    }
+    
+    public boolean addGalho(boolean validarEnergia) throws Exception{
+        if(this.energia > 300 || validarEnergia == false){
+            if(validarEnergia)
+                this.retiraEnergia(300);
+            this.galhos.add(new Galho(30));
+        }
+        return true;
     }
 }

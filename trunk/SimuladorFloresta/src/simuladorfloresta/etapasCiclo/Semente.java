@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
+import simuladorfloresta.EnumEtapaProcesso;
 
 public class Semente extends Etapa{
 
@@ -25,6 +26,10 @@ public class Semente extends Etapa{
                     }
                 } else{
                     arvore.setSaisMinerais(10);
+                }
+                if(arvore.getTamanho() == 2){
+                    arvore.addGalho(false);
+                    arvore.setEtapa(EnumEtapaProcesso.BROTO);
                 }
             }
         } catch (Exception ex) {
