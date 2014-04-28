@@ -1,8 +1,11 @@
 package simuladorfloresta;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.JOptionPane;
+import simuladorfloresta.etapasCiclo.Morte;
+import simuladorfloresta.etapasCiclo.Semente;
 
 public class Gerenciador {
 
@@ -94,15 +97,32 @@ public class Gerenciador {
         fot4.join();
 
         this.ambienteFinalizado.set(false);
-        /*Armazem armMorte = new Armazem(ter.getArvoresEtapa());
+        Armazem armMorte = new Armazem(ter.getArvoresEtapa());
+        Armazem armSemente = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.SEMENTE));
         
-         Morte morte1 = new Morte(armMorte);
-         Morte morte2 = new Morte(armMorte);
-         Morte morte3 = new Morte(armMorte);
+        Morte morte1 = new Morte(armMorte);
+        Morte morte2 = new Morte(armMorte);
+        Morte morte3 = new Morte(armMorte);
         
-         morte1.start();
-         morte2.start();
-         morte3.start();*/
+        Semente semente1 = new Semente(armSemente);
+        Semente semente2 = new Semente(armSemente);
+        Semente semente3 = new Semente(armSemente);
+        
+        morte1.start();
+        morte2.start();
+        morte3.start();
+        
+        semente1.start();
+        semente2.start();
+        semente3.start();
+         
+        morte1.join();
+        morte2.join();
+        morte3.join();
+         
+        semente1.join();
+        semente2.join();
+        semente3.join();
     }
 
     public int getLarguraTerreno() {

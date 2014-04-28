@@ -13,10 +13,11 @@ public class Armazem {
         private Semaphore haElementos;
 	
 	public Armazem(ArrayList lista) {
-		this.tam = lista.size();
-                arm = lista.toArray();
-                acesso = new Semaphore(1);
-                haElementos = new Semaphore(tam);
+	    this.tam = lista.size();
+            this.arm = lista.toArray();
+            this.acesso = new Semaphore(1);
+            this.haElementos = new Semaphore(tam);
+
 	}
 	
 	public Object retira() throws InterruptedException {
