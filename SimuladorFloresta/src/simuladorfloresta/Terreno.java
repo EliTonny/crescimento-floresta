@@ -210,7 +210,7 @@ public class Terreno {
         ArrayList<Arvore> arvoresRetorno = new ArrayList();
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[0].length; j++) {
-                if (arvores[i][j].getEtapa() == etapa) {
+                if (arvores[i][j] != null && arvores[i][j].getEtapa() == etapa) {
                     arvoresRetorno.add(arvores[i][j]);
                 }
             }
