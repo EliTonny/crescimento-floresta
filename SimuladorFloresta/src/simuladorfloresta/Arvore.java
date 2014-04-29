@@ -135,6 +135,14 @@ public abstract class Arvore {
 
     public String ImprimeDados() {
         String saida = "";
+        int qtdfolhas = 0;
+        saida += this.etapa.toString() + "\n";
+        saida += Integer.toString(this.tamanho) + "\n";
+        saida += "Qtd. Galhos: " + Integer.toString(galhos.size()) + "\n";
+        for (Galho galho : galhos) {
+            qtdfolhas += galho.getQtdFolhas();
+        }
+        saida += "Qtd. Folhas: " + Integer.toString(qtdfolhas) + "\n";
         saida += this.getPosicao().toString() + "\n";
         saida += "Agua:" + this.agua + "\n";
         saida += "Luz:" + this.luz + "\n";

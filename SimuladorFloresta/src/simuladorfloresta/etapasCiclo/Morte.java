@@ -19,6 +19,7 @@ public class Morte extends Etapa{
         
         try {
             if(arvore.getEnergia() < 0){
+                System.out.println("Arvore morta: " + arvore.ImprimeDados());
                 Arvore[][] arvores = Terreno.getInstancia().getArvores();
                 arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;
             }

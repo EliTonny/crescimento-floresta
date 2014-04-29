@@ -79,8 +79,10 @@ public class Terreno {
     }
     
     public synchronized void addArvoreCorte(Arvore arvore){
-        arvoresCorte.add(arvore);
-        notify();
+        if(!arvoresCorte.contains(arvore)){
+            arvoresCorte.add(arvore);
+            notify();
+        }
     }
     
     public synchronized Arvore retiraArvoreCorte() throws InterruptedException{
@@ -241,5 +243,5 @@ public class Terreno {
             }
         }
         return arvoresRetorno;
-    }
+    }    
 }
