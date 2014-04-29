@@ -59,7 +59,7 @@ public class Gerenciador {
             long tempoInicial = System.currentTimeMillis();
             for (int i = 0; i < dias; i++) {
                 ProximoDia();
-                //System.out.println("Dia " + (i + 1));
+                System.out.println("Dia " + (i + 1));
             }
             lenhador1.setFinalizado(true);
             lenhador2.setFinalizado(true);
