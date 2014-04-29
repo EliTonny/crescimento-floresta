@@ -8,10 +8,10 @@ public class Lenhador extends Thread{
         try{
             while(!finalizado){
                 Arvore arvore = Terreno.getInstancia().retiraArvoreCorte();
-                Thread.sleep(100);
                 Arvore[][] arvores = Terreno.getInstancia().getArvores();
                 System.out.println("Cortou arvore \n" + arvore.ImprimeDados());
                 arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;                
+                Thread.sleep(10);
             }
         } catch(Exception ex){
             System.out.println(ex.getMessage()); 

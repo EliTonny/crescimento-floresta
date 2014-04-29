@@ -33,7 +33,7 @@ public class Broto extends Etapa{
                 arvore.addGalho(true);
             }
             
-            if(arvore.getTamanho() == 200){
+            if(arvore.getTamanho() >= 200){
                 arvore.setEtapa(EnumEtapaProcesso.ADULTA);
             }
         } catch (Exception ex) {
