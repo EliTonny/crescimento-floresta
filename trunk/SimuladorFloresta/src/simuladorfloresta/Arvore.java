@@ -135,6 +135,7 @@ public abstract class Arvore {
 
     public String ImprimeDados() {
         String saida = "";
+        saida += this.getPosicao().toString() + "\n";
         saida += "Agua:" + this.agua + "\n";
         saida += "Luz:" + this.luz + "\n";
         saida += "Sais:" + this.saisMinerais + "\n";
@@ -142,26 +143,6 @@ public abstract class Arvore {
         return saida;
     }
 
-    /*public void crescer() throws Exception{
-     if(this.energia >= 20){
-     for (Galho galho : galhos) {
-     if(galho.addFolha()){
-     this.retiraEnergia(20);
-     break;
-     }
-     }
-     }
-        
-     if(this.energia >= 50){
-     galhos.add(new Galho(20));
-     this.retiraEnergia(50);
-     }
-        
-     if(this.energia >= 10){
-     this.tamanho++;
-     this.retiraEnergia(10);
-     }
-     }*/
     public int getTamanho() {
         return tamanho;
     }
@@ -268,11 +249,15 @@ public abstract class Arvore {
     }
     
     public boolean addGalho(boolean validarEnergia) throws Exception{
-        if(this.energia > 300 || validarEnergia == false){
+        if(this.energia > 500 || validarEnergia == false){
             if(validarEnergia)
-                this.retiraEnergia(300);
+                this.retiraEnergia(500);
             this.galhos.add(new Galho(30));
         }
         return true;
+    }
+
+    public ArrayList<Galho> getGalhos() {
+        return galhos;
     }
 }

@@ -46,12 +46,24 @@ public class Gerenciador {
                             + ") para o terreno");
                 }
             }
+            
+            Lenhador lenhador1 = new Lenhador();
+            Lenhador lenhador2 = new Lenhador();
+            Lenhador lenhador3 = new Lenhador();
+            
+            lenhador1.start();
+            lenhador2.start();
+            lenhador3.start();
 
             long tempoInicial = System.currentTimeMillis();
             for (int i = 0; i < dias; i++) {
                 ProximoDia();
                 System.out.println("Dia " + (i + 1));
             }
+            lenhador1.setFinalizado(true);
+            lenhador2.setFinalizado(true);
+            lenhador3.setFinalizado(true);
+            
             System.out.println("Tempo de execução: " + ((System.currentTimeMillis() - tempoInicial)/1000.0) + " segundos");
             System.out.println("Processo finalizado.");
             //System.out.println(ter.ImprimeDados());
