@@ -104,7 +104,10 @@ public class Terreno {
         lockAmbiente.lock();
         try {
             while (arvoresAmbiente.isEmpty()) {
-                if (!condHasArvoreAmbiente.await(1, TimeUnit.SECONDS)) {
+                if (finalizarDia.get()) {
+                    return null;
+                }
+                if (!condHasArvoreAmbiente.await(200, TimeUnit.MILLISECONDS)) {
                     return null;
                 }
             }
