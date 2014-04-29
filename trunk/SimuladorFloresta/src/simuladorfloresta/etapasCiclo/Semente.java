@@ -6,7 +6,7 @@ import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
 import simuladorfloresta.EnumEtapaProcesso;
 
-public class Semente extends Etapa{
+public class Semente extends Etapa {
 
     public Semente(Armazem armazem) {
         super(armazem);
@@ -14,20 +14,21 @@ public class Semente extends Etapa{
 
     @Override
     public void executar(Arvore arvore) {
-        if(arvore == null)
+        if (arvore == null) {
             return;
-        
+        }
+
         try {
-            if(arvore.retiraSaisMinerais(10)){
-                if(arvore.retiraAgua(10)){
-                    if(!arvore.setTamanho(1)){
+            if (arvore.retiraSaisMinerais(10)) {
+                if (arvore.retiraAgua(10)) {
+                    if (!arvore.setTamanho(1)) {
                         arvore.setSaisMinerais(10);
                         arvore.setAgua(10);
                     }
-                } else{
+                } else {
                     arvore.setSaisMinerais(10);
                 }
-                if(arvore.getTamanho() == 2){
+                if (arvore.getTamanho() == 2) {
                     arvore.addGalho(false);
                     arvore.setEtapa(EnumEtapaProcesso.BROTO);
                 }
