@@ -16,22 +16,23 @@ public class Terreno {
     private int YMax;
     private Arvore[][] arvores;
     private int numArvores;
-
-    public int getNumArvores() {
-        return numArvores;
-    }
     private int numMaxArvores;
     private final int POSICOES_POR_METRO = 2;
     public static final int ARVORES_POR_METRO2 = 4;
     private static Terreno instancia;
-    private Queue<Arvore> ArvoreAmbiente;
-    private Queue<Arvore> ArvoreFotossintese;
+    private Queue<Arvore> arvoresAmbiente;
+    private Queue<Arvore> arvoresFotossintese;
     private Lock lockAmbiente;
     private Condition condHasArvoreAmbiente;
     private Lock lockFotossintese;
     private Condition condHasArvoreFotossintese;
     private AtomicBoolean finalizar;
+    private Queue<Arvore> arvoresCorte;
 
+    public int getNumArvores() {
+        return numArvores;
+    }
+    
     public static Terreno getInstancia() {
         if (instancia == null) {
             instancia = new Terreno();
@@ -60,12 +61,13 @@ public class Terreno {
                 * comprimento * POSICOES_POR_METRO;
         this.finalizar = finalizar;
         numArvores = 0;
-        ArvoreAmbiente = new ArrayDeque<>();
-        ArvoreFotossintese = new ArrayDeque<>();
+        arvoresAmbiente = new ArrayDeque<>();
+        arvoresFotossintese = new ArrayDeque<>();
         lockAmbiente = new ReentrantLock();
         condHasArvoreAmbiente = lockAmbiente.newCondition();
         lockFotossintese = new ReentrantLock();
         condHasArvoreFotossintese = lockFotossintese.newCondition();
+        arvoresCorte = new ArrayDeque<>();
 
         /*for (int x = 0; x < this.arvores.length; x++) {
          for (int y = 0; y < this.arvores[x].length; y++) {
@@ -75,19 +77,30 @@ public class Terreno {
          }
          }*/
     }
+    
+    public synchronized void addArvoreCorte(Arvore arvore){
+        arvoresCorte.add(arvore);
+        notify();
+    }
+    
+    public synchronized Arvore retiraArvoreCorte() throws InterruptedException{
+        while(arvoresCorte.isEmpty())
+            wait();
+        return arvoresCorte.poll();
+    }
 
     //Depois de processar a arvore, faz um setArvoreFotossintese
     public Arvore retiraArvoreAmbiente() throws InterruptedException {
         //if Nao temArvoreAmbiente então wait
         lockAmbiente.lock();
         try {
-            while (ArvoreAmbiente.isEmpty()) {
+            while (arvoresAmbiente.isEmpty()) {
                 if (!condHasArvoreAmbiente.await(1, TimeUnit.SECONDS)) {
                     //System.out.println("Saiu do retiraArvoreAmbiente");
                     return null;
                 }
             }
-            return ArvoreAmbiente.poll();
+            return arvoresAmbiente.poll();
         } finally {
             lockAmbiente.unlock();
         }
@@ -96,7 +109,7 @@ public class Terreno {
     public void setArvoreAmbiente(Arvore arvore) {
         lockAmbiente.lock();
         try {
-            ArvoreAmbiente.add(arvore);
+            arvoresAmbiente.add(arvore);
             condHasArvoreAmbiente.signalAll();
         } finally {
             lockAmbiente.unlock();
@@ -107,7 +120,7 @@ public class Terreno {
     public Arvore retiraArvoreFotossintese() throws InterruptedException {
         lockFotossintese.lock();
         try {
-            while (ArvoreFotossintese.isEmpty()) {
+            while (arvoresFotossintese.isEmpty()) {
                 if (finalizar.get()) {
                     return null;
                 }
@@ -116,7 +129,7 @@ public class Terreno {
                 }
                 //condHasArvoreFotossintese.await();
             }
-            return ArvoreFotossintese.poll();
+            return arvoresFotossintese.poll();
         } finally {
             lockFotossintese.unlock();
         }
@@ -125,7 +138,7 @@ public class Terreno {
     public void setArvoreFotossintese(Arvore arvore) {
         lockFotossintese.lock();
         try {
-            ArvoreFotossintese.add(arvore);
+            arvoresFotossintese.add(arvore);
             condHasArvoreFotossintese.signalAll();
         } finally {
             lockFotossintese.unlock();
@@ -148,7 +161,7 @@ public class Terreno {
         arvore.setPosicao(pos);
         arvores[pos.getX()][pos.getY()] = arvore;
 
-        ArvoreAmbiente.add(arvore);
+        arvoresAmbiente.add(arvore);
         return true;
     }
 
