@@ -83,56 +83,18 @@ public abstract class Arvore {
         return saisFotossintese;
     }
 
-    /*public synchronized boolean retiraNutrientes(int qtdAgua, int qtdLuz, int qtdSais) throws InterruptedException {
-        lock.lock();
-        try {
-            while (agua < qtdAgua) {
-                if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
-                    return false;
-                }
-            }
-            while (luz < qtdLuz) {
-                if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
-                    return false;
-                }
-            }
-            while (saisMinerais < qtdSais) {
-                if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
-                    return false;
-                }
-            }
-            
-            return true;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public synchronized void setNutrientes() {
-    }*/
-
     public synchronized void retiraEnergia(int qtd) throws Exception {
-        /*while (energia < qtd) {
-         wait();
-         }*/
-
         energia -= qtd;
-        msg("Retirou " + qtd + " energia. Total:" + energia);
     }
 
     public synchronized void setEnergia(int qtd) {
         this.energia += qtd;
-        //notifyAll();
     }
 
     public int getEnergia() {
         return energia;
     }
-
-    private void msg(String msg) {
-        //System.out.println(msg);
-    }
-
+    
     public String ImprimeDados() {
         String saida = "";
         int qtdfolhas = 0;
@@ -175,7 +137,6 @@ public abstract class Arvore {
                 }
             }
             agua -= qtd;
-            msg("Retirou " + qtd + " água. Total:" + agua);
             return true;
         } finally {
             lock.unlock();
@@ -205,7 +166,6 @@ public abstract class Arvore {
                 }
             }
             luz -= qtd;
-            msg("Retirou " + qtd + " luz. Total:" + luz);
             return true;
         } finally {
             lock.unlock();
@@ -235,7 +195,6 @@ public abstract class Arvore {
                 }
             }
             saisMinerais -= qtd;
-            msg("Retirou " + qtd + " Sais. Total:" + saisMinerais);
             return true;
         } finally {
             lock.unlock();
@@ -255,11 +214,12 @@ public abstract class Arvore {
             lock.unlock();
         }
     }
-    
-    public boolean addGalho(boolean validarEnergia) throws Exception{
-        if(this.energia > 500 || validarEnergia == false){
-            if(validarEnergia)
+
+    public boolean addGalho(boolean validarEnergia) throws Exception {
+        if (this.energia > 500 || validarEnergia == false) {
+            if (validarEnergia) {
                 this.retiraEnergia(500);
+            }
             this.galhos.add(new Galho(30));
         }
         return true;

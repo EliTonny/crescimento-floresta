@@ -6,37 +6,22 @@ import java.util.logging.Logger;
 public class Fotossintese extends Thread {
 
     private Terreno terreno;
-    //private boolean finalizar;
-
-    /*public void setFinalizar(boolean finalizar) {
-        this.finalizar = finalizar;
-    }*/
 
     public Fotossintese(Terreno terreno) {
         this.terreno = terreno;
-        //finalizar = false;
     }
 
     @Override
     public void run() {
         try {
-            //int contador = 0;
             while (true) {
-                //contador++;
                 Arvore arv = this.terreno.retiraArvoreFotossintese();
                 if (arv == null) {
-                    //System.out.println("Retornou NULL no retiraArvoreFotossintese. " + contador);
                     break;
                 }
-                if (!Fotossintese(arv)) {
-                   /* if (this.finalizar) {
-                        break;
-                    }*/
-                }
+                Fotossintese(arv);
                 this.terreno.setArvoreAmbiente(arv);
             }
-            //this.terreno.addArvore(new ArvorePauBrasil());
-
         } catch (InterruptedException ex) {
             Logger.getLogger(Ambiente.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

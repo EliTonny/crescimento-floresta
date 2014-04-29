@@ -17,9 +17,9 @@ public class Posicao {
         this.X = X;
         this.Y = Y;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         return "Posicao X: " + Integer.toString(X) + " Posicao Y: " + Integer.toString(Y);
     }
 }

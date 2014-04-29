@@ -6,22 +6,20 @@ import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
 import simuladorfloresta.Terreno;
 
-public class Morte extends Etapa{
+public class Morte extends Etapa {
 
     public Morte(Armazem armazem) {
         super(armazem);
     }
-    
+
     @Override
     public void executar(Arvore arvore) {
-        if(arvore == null)
-            return;
-        
         try {
-            if(arvore.getEnergia() < 0){
-                System.out.println("Arvore morta: " + arvore.ImprimeDados());
-                Arvore[][] arvores = Terreno.getInstancia().getArvores();
-                arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;
+            if (arvore == null) {
+                return;
+            }
+            if (arvore.getEnergia() < 0) {
+                Terreno.getInstancia().killArvore(arvore);
             }
         } catch (Exception ex) {
             Logger.getLogger(Morte.class.getName()).log(Level.SEVERE, null, ex);

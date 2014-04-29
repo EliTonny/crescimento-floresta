@@ -5,21 +5,22 @@ import java.util.logging.Logger;
 import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
 
-public abstract class Etapa extends Thread{
-    
+public abstract class Etapa extends Thread {
+
     private Armazem armazem;
-    
-    public Etapa(Armazem armazem){
+
+    public Etapa(Armazem armazem) {
         this.armazem = armazem;
     }
-    
+
     public abstract void executar(Arvore arvore);
-    
-    public void run(){
-        while(armazem.getHaElementos().tryAcquire()){
+
+    @Override
+    public void run() {
+        while (armazem.getHaElementos().tryAcquire()) {
             try {
                 Object obj = armazem.retira();
-                if(obj instanceof Arvore){
+                if (obj instanceof Arvore) {
                     executar((Arvore) obj);
                 } else {
                     throw new Exception("Armazem com objetos incompativeis");
@@ -29,7 +30,7 @@ public abstract class Etapa extends Thread{
             } catch (Exception ex) {
                 Logger.getLogger(Morte.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-        }        
+
+        }
     }
 }

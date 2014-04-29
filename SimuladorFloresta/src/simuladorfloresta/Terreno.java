@@ -1,11 +1,11 @@
 package simuladorfloresta;
 
+import java.nio.channels.AsynchronousChannel;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -26,23 +26,23 @@ public class Terreno {
     private Condition condHasArvoreAmbiente;
     private Lock lockFotossintese;
     private Condition condHasArvoreFotossintese;
-    private AtomicBoolean finalizar;
+    private AtomicBoolean finalizarDia;
+    private boolean finalizarProcesso;
+
+    public void setFinalizarProcesso(boolean finalizarProcesso) {
+        this.finalizarProcesso = finalizarProcesso;
+    }
     private Queue<Arvore> arvoresCorte;
 
     public int getNumArvores() {
         return numArvores;
     }
-    
+
     public static Terreno getInstancia() {
         if (instancia == null) {
             instancia = new Terreno();
-            //instancia = new Terreno(Gerenciador.getinstancia().getLarguraTerreno(), Gerenciador.getinstancia().getComprimentoTerreno());
         }
         return instancia;
-    }
-
-    public Arvore[][] getArvores() {
-        return arvores;
     }
 
     public int getNumMaxArvores() {
@@ -59,7 +59,7 @@ public class Terreno {
         arvores = new Arvore[comprimento * POSICOES_POR_METRO][largura * POSICOES_POR_METRO];
         numMaxArvores = largura * POSICOES_POR_METRO
                 * comprimento * POSICOES_POR_METRO;
-        this.finalizar = finalizar;
+        this.finalizarDia = finalizar;
         numArvores = 0;
         arvoresAmbiente = new ArrayDeque<>();
         arvoresFotossintese = new ArrayDeque<>();
@@ -68,37 +68,43 @@ public class Terreno {
         lockFotossintese = new ReentrantLock();
         condHasArvoreFotossintese = lockFotossintese.newCondition();
         arvoresCorte = new ArrayDeque<>();
-
-        /*for (int x = 0; x < this.arvores.length; x++) {
-         for (int y = 0; y < this.arvores[x].length; y++) {
-         if (arvores[x][y] != null) {
-         ArvoreAmbiente.add(arvores[x][y]);
-         }
-         }
-         }*/
     }
-    
-    public synchronized void addArvoreCorte(Arvore arvore){
-        if(!arvoresCorte.contains(arvore)){
+
+    public synchronized boolean killArvore(Arvore arvore) {
+        //Verifica-se se a arvore do terreno é a mesma passada por parametros.
+        //Essa verificação é necessária pois em alguns momentos, a arvore do terreno
+        //pode morrer, e outro processo pode tentar matar a mesma arvore
+        if (arvore.equals(arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()])) {
+            arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;
+            this.numArvores--;
+            System.out.println("Arvore Morta: " + arvore.getPosicao().toString());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public synchronized void addArvoreCorte(Arvore arvore) {
+        if (!arvoresCorte.contains(arvore)) {
             arvoresCorte.add(arvore);
             notify();
         }
     }
-    
-    public synchronized Arvore retiraArvoreCorte() throws InterruptedException{
-        while(arvoresCorte.isEmpty())
-            wait();
+
+    public synchronized Arvore retiraArvoreCorte() throws InterruptedException {
+        while (arvoresCorte.isEmpty()) {
+            wait(1000);
+            if(finalizarProcesso)
+                return null;
+        }
         return arvoresCorte.poll();
     }
 
-    //Depois de processar a arvore, faz um setArvoreFotossintese
     public Arvore retiraArvoreAmbiente() throws InterruptedException {
-        //if Nao temArvoreAmbiente então wait
         lockAmbiente.lock();
         try {
             while (arvoresAmbiente.isEmpty()) {
                 if (!condHasArvoreAmbiente.await(1, TimeUnit.SECONDS)) {
-                    //System.out.println("Saiu do retiraArvoreAmbiente");
                     return null;
                 }
             }
@@ -118,18 +124,16 @@ public class Terreno {
         }
     }
 
-    //Depois de processar a arvore, faz um setArvoreAmbiente e um setArvoreCicloVida
     public Arvore retiraArvoreFotossintese() throws InterruptedException {
         lockFotossintese.lock();
         try {
             while (arvoresFotossintese.isEmpty()) {
-                if (finalizar.get()) {
+                if (finalizarDia.get()) {
                     return null;
                 }
                 if (!condHasArvoreFotossintese.await(200, TimeUnit.MILLISECONDS)) {
                     return null;
                 }
-                //condHasArvoreFotossintese.await();
             }
             return arvoresFotossintese.poll();
         } finally {
@@ -153,7 +157,7 @@ public class Terreno {
      * @return Retorna false se não houver mais espaço no terreno
      *
      */
-    public boolean addArvore(Arvore arvore) throws Exception {
+    public synchronized boolean addArvore(Arvore arvore) throws Exception {
         Posicao pos;
         if (this.numArvores == this.numMaxArvores) {
             return false;
@@ -162,6 +166,7 @@ public class Terreno {
         pos = this.procuraPosicaoAleatoria();
         arvore.setPosicao(pos);
         arvores[pos.getX()][pos.getY()] = arvore;
+        numArvores++;
 
         arvoresAmbiente.add(arvore);
         return true;
@@ -185,7 +190,6 @@ public class Terreno {
         for (int x = XAleatorio; x < this.XMax * POSICOES_POR_METRO; x++) {
             for (int y = YAleatorio; y < this.YMax * POSICOES_POR_METRO; y++) {
                 if (arvores[x][y] == null) {
-                    numArvores++;
                     pos = new Posicao(x, y);
                     return pos;
 
@@ -196,7 +200,6 @@ public class Terreno {
             for (int x = 0; x < this.XMax * POSICOES_POR_METRO; x++) {
                 for (int y = 0; y < this.YMax * POSICOES_POR_METRO; y++) {
                     if (arvores[x][y] == null) {
-                        numArvores++;
                         pos = new Posicao(x, y);
                         return pos;
                     }
@@ -243,5 +246,5 @@ public class Terreno {
             }
         }
         return arvoresRetorno;
-    }    
+    }
 }
