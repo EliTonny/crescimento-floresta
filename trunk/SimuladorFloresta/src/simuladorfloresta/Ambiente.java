@@ -22,10 +22,7 @@ public class Ambiente extends Thread {
         try {
             int numCiclos = this.terreno.getNumArvores() * Gerenciador.NUM_CLICOS_DIA;
 
-            while (true) {
-                if (numArvoresProcessadas.get() >= numCiclos) {
-                    break;
-                }
+            while (numArvoresProcessadas.get() < numCiclos) {
                 numArvoresProcessadas.incrementAndGet();
 
                 Arvore arv = this.terreno.retiraArvoreAmbiente();
