@@ -7,9 +7,9 @@ import simuladorfloresta.Arvore;
 
 public abstract class Etapa extends Thread {
 
-    private Armazem armazem;
+    private Armazem<Arvore> armazem;
 
-    public Etapa(Armazem armazem) {
+    public Etapa(Armazem<Arvore> armazem) {
         this.armazem = armazem;
     }
 
@@ -19,18 +19,10 @@ public abstract class Etapa extends Thread {
     public void run() {
         while (armazem.getHaElementos().tryAcquire()) {
             try {
-                Object obj = armazem.retira();
-                if (obj instanceof Arvore) {
-                    executar((Arvore) obj);
-                } else {
-                    throw new Exception("Armazem com objetos incompativeis");
-                }
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Morte.class.getName()).log(Level.SEVERE, null, ex);
+                executar(armazem.retira());
             } catch (Exception ex) {
                 Logger.getLogger(Morte.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
 }

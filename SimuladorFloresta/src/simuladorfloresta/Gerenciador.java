@@ -120,10 +120,10 @@ public class Gerenciador {
         fot4.join();
 
         this.ambienteFinalizado.set(false);
-        Armazem armMorte = new Armazem(ter.getArvoresEtapa());
-        Armazem armSemente = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.SEMENTE));
-        Armazem armBroto = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.BROTO));
-        Armazem armAdulta = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.ADULTA));
+        Armazem<Arvore> armMorte = new Armazem(ter.getArvoresEtapa());
+        Armazem<Arvore> armSemente = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.SEMENTE));
+        Armazem<Arvore> armBroto = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.BROTO));
+        Armazem<Arvore> armAdulta = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.ADULTA));
 
         Morte morte1 = new Morte(armMorte);
         Morte morte2 = new Morte(armMorte);

@@ -18,7 +18,7 @@ public abstract class Arvore {
     private int raioMax;
     private Terreno terreno;
     private Posicao posicao;
-    private Lock lock;
+    private Lock lockNutrientes;
     private Condition temAgua;
     private Condition temLuz;
     private Condition temSaisMinerais;
@@ -34,10 +34,10 @@ public abstract class Arvore {
             int aguaFot,
             int saisFot,
             EnumEtapaProcesso etapa) {
-        lock = new ReentrantLock();
-        temAgua = lock.newCondition();
-        temLuz = lock.newCondition();
-        temSaisMinerais = lock.newCondition();
+        lockNutrientes = new ReentrantLock();
+        temAgua = lockNutrientes.newCondition();
+        temLuz = lockNutrientes.newCondition();
+        temSaisMinerais = lockNutrientes.newCondition();
         this.tamanhoMax = tamanhoMax;
         this.raioMax = raioMax;
         this.luzFotossintese = luzFot;
@@ -129,7 +129,7 @@ public abstract class Arvore {
     }
 
     public boolean retiraAgua(int qtd) throws Exception {
-        lock.lock();
+        lockNutrientes.lock();
         try {
             while (agua < qtd) {
                 if (!temAgua.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
@@ -139,12 +139,12 @@ public abstract class Arvore {
             agua -= qtd;
             return true;
         } finally {
-            lock.unlock();
+            lockNutrientes.unlock();
         }
     }
 
     public void setAgua(int qtd) {
-        lock.lock();
+        lockNutrientes.lock();
         try {
             //falta fazer cálculo para verificar quanto 
             //a planta consegue absorver considerando
@@ -153,12 +153,12 @@ public abstract class Arvore {
             this.agua += qtd;
             temAgua.signalAll();
         } finally {
-            lock.unlock();
+            lockNutrientes.unlock();
         }
     }
 
     public boolean retiraLuz(int qtd) throws Exception {
-        lock.lock();
+        lockNutrientes.lock();
         try {
             while (luz < qtd) {
                 if (!temLuz.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
@@ -168,12 +168,12 @@ public abstract class Arvore {
             luz -= qtd;
             return true;
         } finally {
-            lock.unlock();
+            lockNutrientes.unlock();
         }
     }
 
     public void setLuz(int qtd) {
-        lock.lock();
+        lockNutrientes.lock();
         try {
 
             //falta fazer cálculo para verificar quanto 
@@ -182,12 +182,12 @@ public abstract class Arvore {
             this.luz += qtd;
             temLuz.signalAll();
         } finally {
-            lock.unlock();
+            lockNutrientes.unlock();
         }
     }
 
     public boolean retiraSaisMinerais(int qtd) throws Exception {
-        lock.lock();
+        lockNutrientes.lock();
         try {
             while (saisMinerais < qtd) {
                 if (!temSaisMinerais.await(TEMPO_ESPERA, TimeUnit.MILLISECONDS)) {
@@ -197,12 +197,12 @@ public abstract class Arvore {
             saisMinerais -= qtd;
             return true;
         } finally {
-            lock.unlock();
+            lockNutrientes.unlock();
         }
     }
 
     public void setSaisMinerais(int qtd) {
-        lock.lock();
+        lockNutrientes.lock();
         try {
 
             //falta fazer cálculo para verificar quanto 
@@ -211,7 +211,7 @@ public abstract class Arvore {
             this.saisMinerais += qtd;
             temSaisMinerais.signalAll();
         } finally {
-            lock.unlock();
+            lockNutrientes.unlock();
         }
     }
 
