@@ -8,7 +8,7 @@ import simuladorfloresta2.EnumEtapaProcesso;
 
 public class Semente extends Etapa {
 
-    public Semente(Armazem armazem) {
+    public Semente(Armazem<Arvore> armazem) {
         super(armazem);
     }
 

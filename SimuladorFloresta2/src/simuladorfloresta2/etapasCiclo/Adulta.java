@@ -9,7 +9,7 @@ import simuladorfloresta2.Terreno;
 public class Adulta extends Etapa {
 
     private boolean boaParaCorte;
-    public Adulta(Armazem armazem) {
+    public Adulta(Armazem<Arvore> armazem) {
         super(armazem);
     }
 
