@@ -9,7 +9,7 @@ import simuladorfloresta2.Galho;
 
 public class Broto extends Etapa {
 
-    public Broto(Armazem armazem) {
+    public Broto(Armazem<Arvore> armazem) {
         super(armazem);
     }
 

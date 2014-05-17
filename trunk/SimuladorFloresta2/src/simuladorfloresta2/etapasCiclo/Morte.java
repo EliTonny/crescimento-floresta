@@ -8,7 +8,7 @@ import simuladorfloresta2.Terreno;
 
 public class Morte extends Etapa {
 
-    public Morte(Armazem armazem) {
+    public Morte(Armazem<Arvore> armazem) {
         super(armazem);
     }
 
