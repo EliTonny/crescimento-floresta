@@ -7,9 +7,9 @@ import simuladorfloresta.Arvore;
 
 public abstract class Etapa extends Thread {
 
-    private Armazem<Arvore> armazem;
+    private Armazem armazem;
 
-    public Etapa(Armazem<Arvore> armazem) {
+    public Etapa(Armazem armazem) {
         this.armazem = armazem;
     }
 

@@ -1,35 +1,11 @@
 package simuladorfloresta;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+public class Fotossintese {
 
-public class Fotossintese extends Thread {
-
-    private Terreno terreno;
-
-    public Fotossintese(Terreno terreno) {
-        this.terreno = terreno;
+    private Fotossintese() {
     }
 
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                Arvore arv = this.terreno.retiraArvoreFotossintese();
-                if (arv == null) {
-                    break;
-                }
-                Fotossintese(arv);
-                this.terreno.setArvoreAmbiente(arv);
-            }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Ambiente.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Fotossintese.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private boolean Fotossintese(Arvore arv) throws Exception {
+    public static boolean Processa(Arvore arv) throws Exception {
         boolean sucesso = true;
         if (arv.retiraAgua(arv.getAguaFotossintese())) {
             if (arv.retiraLuz(arv.getLuzFotossintese())) {
