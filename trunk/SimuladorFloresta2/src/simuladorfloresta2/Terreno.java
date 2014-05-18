@@ -1,14 +1,8 @@
 package simuladorfloresta2;
 
-import java.nio.channels.AsynchronousChannel;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class Terreno {
 
@@ -22,11 +16,6 @@ public class Terreno {
     private static Terreno instancia;
     private Queue<Arvore> arvoresAmbiente;
     private Queue<Arvore> arvoresFotossintese;
-    private Lock lockAmbiente;
-    private Condition condHasArvoreAmbiente;
-    private Lock lockFotossintese;
-    private Condition condHasArvoreFotossintese;
-    private AtomicBoolean finalizarDia;
     private boolean finalizarProcesso;
 
     public void setFinalizarProcesso(boolean finalizarProcesso) {
@@ -53,20 +42,15 @@ public class Terreno {
      * @param largura Largura do terreno em metros
      * @param comprimento comprimento do terreno em metros
      */
-    public void Inicializa(int largura, int comprimento, AtomicBoolean finalizar) {
+    public void Inicializa(int largura, int comprimento) {
         this.XMax = comprimento;
         this.YMax = largura;
         arvores = new Arvore[comprimento * POSICOES_POR_METRO][largura * POSICOES_POR_METRO];
         numMaxArvores = largura * POSICOES_POR_METRO
                 * comprimento * POSICOES_POR_METRO;
-        this.finalizarDia = finalizar;
         numArvores = 0;
         arvoresAmbiente = new ArrayDeque<>();
         arvoresFotossintese = new ArrayDeque<>();
-        lockAmbiente = new ReentrantLock();
-        condHasArvoreAmbiente = lockAmbiente.newCondition();
-        lockFotossintese = new ReentrantLock();
-        condHasArvoreFotossintese = lockFotossintese.newCondition();
         arvoresCorte = new ArrayDeque<>();
     }
 
@@ -94,64 +78,33 @@ public class Terreno {
     public synchronized Arvore retiraArvoreCorte() throws InterruptedException {
         while (arvoresCorte.isEmpty()) {
             wait(1000);
-            if(finalizarProcesso)
+            if (finalizarProcesso) {
                 return null;
+            }
         }
         return arvoresCorte.poll();
     }
 
-    public Arvore retiraArvoreAmbiente() throws InterruptedException {
-        lockAmbiente.lock();
-        try {
-            while (arvoresAmbiente.isEmpty()) {
-                if (finalizarDia.get()) {
-                    return null;
-                }
-                if (!condHasArvoreAmbiente.await(200, TimeUnit.MILLISECONDS)) {
-                    return null;
-                }
-            }
-            return arvoresAmbiente.poll();
-        } finally {
-            lockAmbiente.unlock();
+    public Arvore retiraArvoreAmbiente() {
+        while (arvoresAmbiente.isEmpty()) {
+            return null;
         }
+        return arvoresAmbiente.poll();
     }
 
     public void setArvoreAmbiente(Arvore arvore) {
-        lockAmbiente.lock();
-        try {
-            arvoresAmbiente.add(arvore);
-            condHasArvoreAmbiente.signalAll();
-        } finally {
-            lockAmbiente.unlock();
-        }
+        arvoresAmbiente.add(arvore);
     }
 
-    public Arvore retiraArvoreFotossintese() throws InterruptedException {
-        lockFotossintese.lock();
-        try {
-            while (arvoresFotossintese.isEmpty()) {
-                if (finalizarDia.get()) {
-                    return null;
-                }
-                if (!condHasArvoreFotossintese.await(200, TimeUnit.MILLISECONDS)) {
-                    return null;
-                }
-            }
-            return arvoresFotossintese.poll();
-        } finally {
-            lockFotossintese.unlock();
+    public Arvore retiraArvoreFotossintese() {
+        if (arvoresFotossintese.isEmpty()) {
+            return null;
         }
+        return arvoresFotossintese.poll();
     }
 
     public void setArvoreFotossintese(Arvore arvore) {
-        lockFotossintese.lock();
-        try {
-            arvoresFotossintese.add(arvore);
-            condHasArvoreFotossintese.signalAll();
-        } finally {
-            lockFotossintese.unlock();
-        }
+        arvoresFotossintese.add(arvore);
     }
 
     /**

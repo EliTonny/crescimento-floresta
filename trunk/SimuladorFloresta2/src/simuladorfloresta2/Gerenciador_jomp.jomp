@@ -7,17 +7,17 @@ import simuladorfloresta2.etapasCiclo.Broto;
 import simuladorfloresta2.etapasCiclo.Morte;
 import simuladorfloresta2.etapasCiclo.Semente;
 
-public class Gerenciador {
+public class Gerenciador_jomp {
 
     public static final int NUM_CLICOS_DIA = 50;
-    public static Gerenciador instancia;
+    public static Gerenciador_jomp instancia;
     private Terreno ter;
     private int larguraTerreno;
     private int comprimentoTerreno;
 
-    public static Gerenciador getinstancia() {
+    public static Gerenciador_jomp getinstancia() {
         if (instancia == null) {
-            instancia = new Gerenciador();
+            instancia = new Gerenciador_jomp();
         }
         return instancia;
     }
@@ -84,7 +84,7 @@ public class Gerenciador {
         int numArvoresProcessadas = 0;
 
         boolean finalizou;
-        int numCiclos = terreno.getNumArvores() * Gerenciador.NUM_CLICOS_DIA;
+        int numCiclos = terreno.getNumArvores() * Gerenciador_jomp.NUM_CLICOS_DIA;
 
         //Pelo q percebi, ele usar uma thread para cada seção
         //não adianda colocar mais threads.
@@ -123,7 +123,7 @@ public class Gerenciador {
                         arv = terreno.retiraArvoreFotossintese();
                     }
                     if (arv != null) {
-                        Fotossintese.Processa(arv);
+                        Fotossintese.Fotossintese(arv);
                         //omp critical
                         {
                             terreno.setArvoreAmbiente(arv);
