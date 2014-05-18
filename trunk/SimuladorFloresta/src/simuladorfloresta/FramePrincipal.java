@@ -158,7 +158,7 @@ public class FramePrincipal extends javax.swing.JFrame {
             int larguraTerreno = Integer.parseInt(txtLarguraTerreno.getText());
             int comprimentoTerreno = Integer.parseInt(txtComprimentoTerreno.getText());
             int numDias = Integer.parseInt(txtNumeroDias.getText());
-            Gerenciador ger = Gerenciador.getinstancia();
+            Gerenciador_jomp ger = Gerenciador_jomp.getinstancia();
             ger.Iniciar(larguraTerreno, comprimentoTerreno, numArvores, numDias);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(rootPane, "Valor incorreto em algum campo");

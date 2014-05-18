@@ -3,7 +3,7 @@ package simuladorfloresta;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
-public class Armazem<T> {
+public class Armazem {
 
     private int tam;
     private int ini;
@@ -11,20 +11,20 @@ public class Armazem<T> {
     private Semaphore acesso;
     private Semaphore haElementos;
 
-    public Armazem(ArrayList<T> lista) {
+    public Armazem(ArrayList<Arvore> lista) {
         this.tam = lista.size();
         this.arm = lista.toArray();
         this.acesso = new Semaphore(1);
         this.haElementos = new Semaphore(tam);
     }
 
-    public T retira() throws InterruptedException {
+    public Arvore retira() throws InterruptedException {
         
         acesso.acquire();
         Object x = arm[ini];
         ini = (ini + 1) % tam;
         acesso.release();
-        return (T) x;
+        return (Arvore) x;
     }
 
     public Semaphore getHaElementos() {
