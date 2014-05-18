@@ -37,7 +37,6 @@ public class ConversorJomp3 {
             e.printStackTrace();
         }
         
-        
         //compila arquivo .jomp
         String[] s = new String[1];
         s[0] = fileName;
