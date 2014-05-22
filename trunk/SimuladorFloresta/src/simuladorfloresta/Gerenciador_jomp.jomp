@@ -81,6 +81,7 @@ public class Gerenciador_jomp {
     private void ProximoDia() throws Exception {
 
         Terreno terreno = Terreno.getInstancia();
+        terreno.CarregaArvoresDisponiveis();
         int numArvoresProcessadas = 0;
 
         boolean finalizou;
@@ -181,12 +182,6 @@ public class Gerenciador_jomp {
         adulta1.join();
         adulta2.join();
         adulta3.join();        
-        
-        //omp parallel
-        {
-            
-        }
-        
     }
 
     public int getLarguraTerreno() {

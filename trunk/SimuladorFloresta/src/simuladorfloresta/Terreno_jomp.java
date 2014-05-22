@@ -112,8 +112,6 @@ public class Terreno_jomp {
         arvore.setPosicao(pos);
         arvores[pos.getX()][pos.getY()] = arvore;
         numArvores++;
-
-        arvoresAmbiente.add(arvore);
         return true;
     }
 
@@ -233,6 +231,18 @@ public class Terreno_jomp {
 
     void setArvoreAmbiente(Arvore arv) {
         arvoresAmbiente.add(arv);
+    }
+    
+    public void CarregaArvoresDisponiveis() {
+        Queue saida = new ArrayDeque();
+        for (int i = 0; i < arvores.length; i++) {
+            for (int j = 0; j < arvores[i].length; j++) {
+                if (arvores[i][j] != null) {
+                    saida.add(arvores[i][j]);
+                }
+            }
+        }
+        this.arvoresAmbiente = saida;
     }
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
