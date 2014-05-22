@@ -16,7 +16,7 @@ public abstract class Arvore {
     private int tamanhoMax;
     private int tamanho;
     private int raioMax;
-    private Terreno terreno;
+    private Terreno_jomp terreno;
     private Posicao posicao;
     private Lock lockNutrientes;
     private Condition temAgua;
@@ -63,11 +63,11 @@ public abstract class Arvore {
         this.posicao = posicao;
     }
 
-    public Terreno getTerreno() {
+    public Terreno_jomp getTerreno() {
         return terreno;
     }
 
-    public void setTerreno(Terreno terreno) {
+    public void setTerreno(Terreno_jomp terreno) {
         this.terreno = terreno;
     }
 

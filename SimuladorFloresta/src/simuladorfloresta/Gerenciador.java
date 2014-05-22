@@ -95,13 +95,9 @@ public class Gerenciador {
             //omp section
             {
                 Arvore arv;
-                while (true) {
+                while (numArvoresProcessadas++ < numCiclos) {
                     //omp critical
                     {
-                        if (numArvoresProcessadas >= numCiclos) {
-                            break;
-                        }
-                        numArvoresProcessadas++;
                         arv = terreno.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
@@ -184,7 +180,7 @@ public class Gerenciador {
 
         adulta1.join();
         adulta2.join();
-        adulta3.join();
+        adulta3.join();        
     }
 
     public int getLarguraTerreno() {

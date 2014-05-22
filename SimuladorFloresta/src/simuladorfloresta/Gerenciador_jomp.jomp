@@ -95,13 +95,9 @@ public class Gerenciador_jomp {
             //omp section
             {
                 Arvore arv;
-                while (true) {
+                while (numArvoresProcessadas++ < numCiclos) {
                     //omp critical
                     {
-                        if (numArvoresProcessadas >= numCiclos) {
-                            break;
-                        }
-                        numArvoresProcessadas++;
                         arv = terreno.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
@@ -184,7 +180,13 @@ public class Gerenciador_jomp {
 
         adulta1.join();
         adulta2.join();
-        adulta3.join();
+        adulta3.join();        
+        
+        //omp parallel
+        {
+            
+        }
+        
     }
 
     public int getLarguraTerreno() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 import jomp.runtime.OMP;
 
-public class Terreno {
+public class Terreno_jomp {
 
     private int XMax;
     private int YMax;
@@ -14,7 +14,7 @@ public class Terreno {
     private int numMaxArvores;
     private final int POSICOES_POR_METRO = 2;
     public static final int ARVORES_POR_METRO2 = 4;
-    private static Terreno instancia;
+    private static Terreno_jomp instancia;
     private Queue arvoresAmbiente;
     private Queue arvoresFotossintese;
     private boolean finalizarProcesso;
@@ -28,9 +28,9 @@ public class Terreno {
         return numArvores;
     }
 
-    public static Terreno getInstancia() {
+    public static Terreno_jomp getInstancia() {
         if (instancia == null) {
-            instancia = new Terreno();
+            instancia = new Terreno_jomp();
         }
         return instancia;
     }
@@ -106,7 +106,7 @@ public class Terreno {
         if (this.numArvores == this.numMaxArvores) {
             return false;
         }
-        //arvore.setTerreno(this);
+        //arvore.setTerreno_jomp(this);
         pos = this.procuraPosicaoAleatoria();
         arvore.setPosicao(pos);
         arvores[pos.getX()][pos.getY()] = arvore;
