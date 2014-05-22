@@ -82,6 +82,7 @@ public class Gerenciador_jomp {
     private void ProximoDia() throws Exception {
 
         Terreno terreno = Terreno.getInstancia();
+        terreno.CarregaArvoresDisponiveis();
         int numArvoresProcessadas = 0;
 
         boolean finalizou;
@@ -166,65 +167,7 @@ public class Gerenciador_jomp {
 
         adulta1.join();
         adulta2.join();
-        adulta3.join();
-
-// OMP PARALLEL BLOCK BEGINS
-{
-  __omp_Class2 __omp_Object2 = new __omp_Class2();
-  // shared variables
-  __omp_Object2.adulta3 = adulta3;
-  __omp_Object2.adulta2 = adulta2;
-  __omp_Object2.adulta1 = adulta1;
-  __omp_Object2.broto3 = broto3;
-  __omp_Object2.broto2 = broto2;
-  __omp_Object2.broto1 = broto1;
-  __omp_Object2.semente3 = semente3;
-  __omp_Object2.semente2 = semente2;
-  __omp_Object2.semente1 = semente1;
-  __omp_Object2.morte3 = morte3;
-  __omp_Object2.morte2 = morte2;
-  __omp_Object2.morte1 = morte1;
-  __omp_Object2.armAdulta = armAdulta;
-  __omp_Object2.armBroto = armBroto;
-  __omp_Object2.armSemente = armSemente;
-  __omp_Object2.armMorte = armMorte;
-  __omp_Object2.numCiclos = numCiclos;
-  __omp_Object2.finalizou = finalizou;
-  __omp_Object2.numArvoresProcessadas = numArvoresProcessadas;
-  __omp_Object2.terreno = terreno;
-  // firstprivate variables
-  try {
-    jomp.runtime.OMP.doParallel(__omp_Object2);
-  } catch(Throwable __omp_exception) {
-    System.err.println("OMP Warning: Illegal thread exception ignored!");
-    System.err.println(__omp_exception);
-  }
-  // reduction variables
-  // shared variables
-  adulta3 = __omp_Object2.adulta3;
-  adulta2 = __omp_Object2.adulta2;
-  adulta1 = __omp_Object2.adulta1;
-  broto3 = __omp_Object2.broto3;
-  broto2 = __omp_Object2.broto2;
-  broto1 = __omp_Object2.broto1;
-  semente3 = __omp_Object2.semente3;
-  semente2 = __omp_Object2.semente2;
-  semente1 = __omp_Object2.semente1;
-  morte3 = __omp_Object2.morte3;
-  morte2 = __omp_Object2.morte2;
-  morte1 = __omp_Object2.morte1;
-  armAdulta = __omp_Object2.armAdulta;
-  armBroto = __omp_Object2.armBroto;
-  armSemente = __omp_Object2.armSemente;
-  armMorte = __omp_Object2.armMorte;
-  numCiclos = __omp_Object2.numCiclos;
-  finalizou = __omp_Object2.finalizou;
-  numArvoresProcessadas = __omp_Object2.numArvoresProcessadas;
-  terreno = __omp_Object2.terreno;
-}
-// OMP PARALLEL BLOCK ENDS
-
-        
+        adulta3.join();        
     }
 
     public int getLarguraTerreno() {
@@ -234,52 +177,6 @@ public class Gerenciador_jomp {
     public int getComprimentoTerreno() {
         return comprimentoTerreno;
     }
-
-// OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
-private class __omp_Class2 extends jomp.runtime.BusyTask {
-  // shared variables
-  Adulta adulta3;
-  Adulta adulta2;
-  Adulta adulta1;
-  Broto broto3;
-  Broto broto2;
-  Broto broto1;
-  Semente semente3;
-  Semente semente2;
-  Semente semente1;
-  Morte morte3;
-  Morte morte2;
-  Morte morte1;
-  Armazem armAdulta;
-  Armazem armBroto;
-  Armazem armSemente;
-  Armazem armMorte;
-  int numCiclos;
-  boolean finalizou;
-  int numArvoresProcessadas;
-  Terreno terreno;
-  // firstprivate variables
-  // variables to hold results of reduction
-
-  public void go(int __omp_me) throws Throwable {
-  // firstprivate variables + init
-  // private variables
-  // reduction variables, init to default
-    // OMP USER CODE BEGINS
-
-        {
-            
-        }
-    // OMP USER CODE ENDS
-  // call reducer
-  // output to _rd_ copy
-  if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
-  }
-  }
-}
-// OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
-
-
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class0 extends jomp.runtime.BusyTask {

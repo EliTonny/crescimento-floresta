@@ -81,6 +81,7 @@ public class Gerenciador {
     private void ProximoDia() throws Exception {
 
         Terreno terreno = Terreno.getInstancia();
+        terreno.CarregaArvoresDisponiveis();
         int numArvoresProcessadas = 0;
 
         boolean finalizou;
