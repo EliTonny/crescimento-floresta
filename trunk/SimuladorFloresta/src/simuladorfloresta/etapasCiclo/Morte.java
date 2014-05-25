@@ -19,7 +19,7 @@ public class Morte extends Etapa {
                 return;
             }
             if (arvore.getEnergia() < 0) {
-                Terreno.getInstancia().killArvore(arvore);
+                this.getTerreno().killArvore(arvore);
             }
         } catch (Exception ex) {
             Logger.getLogger(Morte.class.getName()).log(Level.SEVERE, null, ex);

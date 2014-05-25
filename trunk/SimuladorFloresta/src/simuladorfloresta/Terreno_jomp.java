@@ -60,10 +60,15 @@ public class Terreno_jomp {
         //Verifica-se se a arvore do terreno \u00e9 a mesma passada por parametros.
         //Essa verifica\u00e7\u00e3o \u00e9 necess\u00e1ria pois em alguns momentos, a arvore do terreno
         //pode morrer, e outro processo pode tentar matar a mesma arvore
+        if(arvore == null)
+            System.out.println("nula");
+        if(arvore.isMorta())
+            return true;
         if (arvore.equals(arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()])) {
             arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;
             this.numArvores--;
             System.out.println("Arvore Morta: " + arvore.getPosicao().toString());
+            arvore.setMorta(true);
             return true;
         } else {
             return false;
@@ -71,6 +76,11 @@ public class Terreno_jomp {
     }
 
     public synchronized void addArvoreCorte(Arvore arvore) {
+        if(arvore.isMorta())
+        {
+            System.out.println("Arvore Nula - addArvoreCorte");
+            return;
+        }
         if (!arvoresCorte.contains(arvore)) {
             arvoresCorte.add(arvore);
             notify();
@@ -233,17 +243,96 @@ public class Terreno_jomp {
         arvoresAmbiente.add(arv);
     }
     
-    public void CarregaArvoresDisponiveis() {
+    public int CarregaArvoresDisponiveis() {
         Queue saida = new ArrayDeque();
+        int numeroArvores = 0;
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[i].length; j++) {
                 if (arvores[i][j] != null) {
                     saida.add(arvores[i][j]);
+                    numeroArvores++;
                 }
             }
         }
         this.arvoresAmbiente = saida;
+        return numeroArvores;
     }
+    public int CarregaArvoresDisponiveisOMP() {
+        Queue saida = new ArrayDeque();
+        int numeroArvores = 0;
+        
+        OMP.setNumThreads(arvores.length);
+
+// OMP PARALLEL BLOCK BEGINS
+{
+  __omp_Class8 __omp_Object8 = new __omp_Class8();
+  // shared variables
+  __omp_Object8.saida = saida;
+  // firstprivate variables
+  try {
+    jomp.runtime.OMP.doParallel(__omp_Object8);
+  } catch(Throwable __omp_exception) {
+    System.err.println("OMP Warning: Illegal thread exception ignored!");
+    System.err.println(__omp_exception);
+  }
+  // reduction variables
+  numeroArvores  += __omp_Object8._rd_numeroArvores;
+  // shared variables
+  saida = __omp_Object8.saida;
+}
+// OMP PARALLEL BLOCK ENDS
+
+        
+        this.arvoresAmbiente = saida;
+        return numeroArvores;
+    }
+
+// OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
+private class __omp_Class8 extends jomp.runtime.BusyTask {
+  // shared variables
+  Queue saida;
+  // firstprivate variables
+  // variables to hold results of reduction
+  int _rd_numeroArvores;
+
+  public void go(int __omp_me) throws Throwable {
+  // firstprivate variables + init
+  // private variables
+  // reduction variables, init to default
+  int numeroArvores = 0;
+    // OMP USER CODE BEGINS
+
+        {
+            int myId = OMP.getThreadNum();
+            for (int i = 0; i < arvores[myId].length; i++) {
+                if (arvores[myId][i] != null) {
+                     // OMP CRITICAL BLOCK BEGINS
+                     synchronized (jomp.runtime.OMP.getLockByName("")) {
+                     // OMP USER CODE BEGINS
+
+                    {
+                        saida.add(arvores[myId][i]);
+                    }
+                     // OMP USER CODE ENDS
+                     }
+                     // OMP CRITICAL BLOCK ENDS
+
+                    numeroArvores++;
+                }
+            }
+        }
+    // OMP USER CODE ENDS
+  // call reducer
+  numeroArvores = (int) jomp.runtime.OMP.doPlusReduce(__omp_me, numeroArvores);
+  // output to _rd_ copy
+  if (jomp.runtime.OMP.getThreadNum(__omp_me) == 0) {
+    _rd_numeroArvores = numeroArvores;
+  }
+  }
+}
+// OMP PARALLEL REGION INNER CLASS DEFINITION ENDS
+
+
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class4 extends jomp.runtime.BusyTask {

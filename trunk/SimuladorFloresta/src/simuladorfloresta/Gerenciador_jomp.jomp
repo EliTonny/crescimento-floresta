@@ -11,7 +11,7 @@ public class Gerenciador_jomp {
 
     public static final int NUM_CLICOS_DIA = 50;
     public static Gerenciador_jomp instancia;
-    private Terreno ter;
+    private Terreno_jomp ter;
     private int larguraTerreno;
     private int comprimentoTerreno;
 
@@ -31,7 +31,7 @@ public class Gerenciador_jomp {
             this.larguraTerreno = larguraTerreno;
             this.comprimentoTerreno = comprimentoTerreno;
 
-            ter = Terreno.getInstancia();
+            ter = Terreno_jomp.getInstancia();
             ter.Inicializa(larguraTerreno, comprimentoTerreno);
 
             for (int i = 0; i < numArvores; i++) {
@@ -80,15 +80,15 @@ public class Gerenciador_jomp {
 
     private void ProximoDia() throws Exception {
 
-        Terreno terreno = Terreno.getInstancia();
-        terreno.CarregaArvoresDisponiveis();
+        x("1");
         int numArvoresProcessadas = 0;
-
+        x("1.5");
+        int numArvores = ter.CarregaArvoresDisponiveisOMP();
+        x("2");
         boolean finalizou;
-        int numCiclos = terreno.getNumArvores() * Gerenciador_jomp.NUM_CLICOS_DIA;
+        int numCiclos = numArvores * Gerenciador_jomp.NUM_CLICOS_DIA;
 
-        //Pelo q percebi, ele usar uma thread para cada seção
-        //não adianda colocar mais threads.
+        x("3");
         OMP.setNumThreads(2);
 
         //omp parallel sections
@@ -99,13 +99,13 @@ public class Gerenciador_jomp {
                 while (numArvoresProcessadas++ < numCiclos) {
                     //omp critical
                     {
-                        arv = terreno.retiraArvoreAmbiente();
+                        arv = ter.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
                         Ambiente.Processa(arv);
                         //omp critical
                         {
-                            terreno.setArvoreFotossintese(arv);
+                            ter.setArvoreFotossintese(arv);
                         }
                     }
                 }
@@ -117,24 +117,24 @@ public class Gerenciador_jomp {
                 while (!finalizou) {
                     //omp critical
                     {
-                        arv = terreno.retiraArvoreFotossintese();
+                        arv = ter.retiraArvoreFotossintese();
                     }
                     if (arv != null) {
                         Fotossintese.Processa(arv);
                         //omp critical
                         {
-                            terreno.setArvoreAmbiente(arv);
+                            ter.setArvoreAmbiente(arv);
                         }
                     }
                 }
             }
         }
-
+        x("4");
         Armazem armMorte = new Armazem(ter.getArvoresEtapa());
         Armazem armSemente = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.SEMENTE));
         Armazem armBroto = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.BROTO));
         Armazem armAdulta = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.ADULTA));
-
+        x("5");
         Morte morte1 = new Morte(armMorte);
         Morte morte2 = new Morte(armMorte);
         Morte morte3 = new Morte(armMorte);
@@ -181,7 +181,7 @@ public class Gerenciador_jomp {
 
         adulta1.join();
         adulta2.join();
-        adulta3.join();        
+        adulta3.join();      
     }
 
     public int getLarguraTerreno() {
@@ -190,5 +190,10 @@ public class Gerenciador_jomp {
 
     public int getComprimentoTerreno() {
         return comprimentoTerreno;
+    }
+    
+    private void x(String x)
+    {
+        //System.out.println(x);
     }
 }

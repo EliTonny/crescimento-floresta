@@ -4,7 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
-import simuladorfloresta.Terreno;
+import simuladorfloresta.Terreno_jomp;
 
 public class Adulta extends Etapa {
 
@@ -26,7 +26,7 @@ public class Adulta extends Etapa {
             }
             if (!boaParaCorte && arvore.getTamanho() >= 400) {
                 boaParaCorte = true;
-                Terreno.getInstancia().addArvoreCorte(arvore);
+                this.getTerreno().addArvoreCorte(arvore);
             }
         } catch (Exception ex) {
             Logger.getLogger(Adulta.class.getName()).log(Level.SEVERE, null, ex);
