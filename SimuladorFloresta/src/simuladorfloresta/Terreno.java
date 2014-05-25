@@ -59,10 +59,15 @@ public class Terreno {
         //Verifica-se se a arvore do terreno é a mesma passada por parametros.
         //Essa verificação é necessária pois em alguns momentos, a arvore do terreno
         //pode morrer, e outro processo pode tentar matar a mesma arvore
+        if(arvore == null)
+            System.out.println("nula");
+        if(arvore.isMorta())
+            return true;
         if (arvore.equals(arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()])) {
             arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;
             this.numArvores--;
             System.out.println("Arvore Morta: " + arvore.getPosicao().toString());
+            arvore.setMorta(true);
             return true;
         } else {
             return false;
@@ -70,6 +75,11 @@ public class Terreno {
     }
 
     public synchronized void addArvoreCorte(Arvore arvore) {
+        if(arvore.isMorta())
+        {
+            System.out.println("Arvore Nula - addArvoreCorte");
+            return;
+        }
         if (!arvoresCorte.contains(arvore)) {
             arvoresCorte.add(arvore);
             notify();
@@ -221,15 +231,41 @@ public class Terreno {
         arvoresAmbiente.add(arv);
     }
     
-    public void CarregaArvoresDisponiveis() {
+    public int CarregaArvoresDisponiveis() {
         Queue saida = new ArrayDeque();
+        int numeroArvores = 0;
         for (int i = 0; i < arvores.length; i++) {
             for (int j = 0; j < arvores[i].length; j++) {
                 if (arvores[i][j] != null) {
                     saida.add(arvores[i][j]);
+                    numeroArvores++;
                 }
             }
         }
         this.arvoresAmbiente = saida;
+        return numeroArvores;
+    }
+    public int CarregaArvoresDisponiveisOMP() {
+        Queue saida = new ArrayDeque();
+        int numeroArvores = 0;
+        
+        OMP.setNumThreads(arvores.length);
+        
+        //omp parallel reduction(+:numeroArvores)
+        {
+            int myId = OMP.getThreadNum();
+            for (int i = 0; i < arvores[myId].length; i++) {
+                if (arvores[myId][i] != null) {
+                    //omp critical
+                    {
+                        saida.add(arvores[myId][i]);
+                    }
+                    numeroArvores++;
+                }
+            }
+        }
+        
+        this.arvoresAmbiente = saida;
+        return numeroArvores;
     }
 }

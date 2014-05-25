@@ -12,7 +12,7 @@ public class Gerenciador_jomp {
 
     public static final int NUM_CLICOS_DIA = 50;
     public static Gerenciador_jomp instancia;
-    private Terreno ter;
+    private Terreno_jomp ter;
     private int larguraTerreno;
     private int comprimentoTerreno;
 
@@ -32,7 +32,7 @@ public class Gerenciador_jomp {
             this.larguraTerreno = larguraTerreno;
             this.comprimentoTerreno = comprimentoTerreno;
 
-            ter = Terreno.getInstancia();
+            ter = Terreno_jomp.getInstancia();
             ter.Inicializa(larguraTerreno, comprimentoTerreno);
 
             for (int i = 0; i < numArvores; i++) {
@@ -81,15 +81,15 @@ public class Gerenciador_jomp {
 
     private void ProximoDia() throws Exception {
 
-        Terreno terreno = Terreno.getInstancia();
-        terreno.CarregaArvoresDisponiveis();
+        x("1");
         int numArvoresProcessadas = 0;
-
+        x("1.5");
+        int numArvores = ter.CarregaArvoresDisponiveisOMP();
+        x("2");
         boolean finalizou;
-        int numCiclos = terreno.getNumArvores() * Gerenciador_jomp.NUM_CLICOS_DIA;
+        int numCiclos = numArvores * Gerenciador_jomp.NUM_CLICOS_DIA;
 
-        //Pelo q percebi, ele usar uma thread para cada se\u00e7\u00e3o
-        //n\u00e3o adianda colocar mais threads.
+        x("3");
         OMP.setNumThreads(2);
 
 // OMP PARALLEL BLOCK BEGINS
@@ -97,8 +97,8 @@ public class Gerenciador_jomp {
   __omp_Class0 __omp_Object0 = new __omp_Class0();
   // shared variables
   __omp_Object0.numCiclos = numCiclos;
+  __omp_Object0.numArvores = numArvores;
   __omp_Object0.numArvoresProcessadas = numArvoresProcessadas;
-  __omp_Object0.terreno = terreno;
   // firstprivate variables
   try {
     jomp.runtime.OMP.doParallel(__omp_Object0);
@@ -110,17 +110,17 @@ public class Gerenciador_jomp {
   // shared variables
   numCiclos = __omp_Object0.numCiclos;
   finalizou = __omp_Object0.finalizou;
+  numArvores = __omp_Object0.numArvores;
   numArvoresProcessadas = __omp_Object0.numArvoresProcessadas;
-  terreno = __omp_Object0.terreno;
 }
 // OMP PARALLEL BLOCK ENDS
 
-
+        x("4");
         Armazem armMorte = new Armazem(ter.getArvoresEtapa());
         Armazem armSemente = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.SEMENTE));
         Armazem armBroto = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.BROTO));
         Armazem armAdulta = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.ADULTA));
-
+        x("5");
         Morte morte1 = new Morte(armMorte);
         Morte morte2 = new Morte(armMorte);
         Morte morte3 = new Morte(armMorte);
@@ -167,7 +167,7 @@ public class Gerenciador_jomp {
 
         adulta1.join();
         adulta2.join();
-        adulta3.join();        
+        adulta3.join();      
     }
 
     public int getLarguraTerreno() {
@@ -177,14 +177,19 @@ public class Gerenciador_jomp {
     public int getComprimentoTerreno() {
         return comprimentoTerreno;
     }
+    
+    private void x(String x)
+    {
+        //System.out.println(x);
+    }
 
 // OMP PARALLEL REGION INNER CLASS DEFINITION BEGINS
 private class __omp_Class0 extends jomp.runtime.BusyTask {
   // shared variables
   int numCiclos;
   boolean finalizou;
+  int numArvores;
   int numArvoresProcessadas;
-  Terreno terreno;
   // firstprivate variables
   // variables to hold results of reduction
 
@@ -218,7 +223,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                      // OMP USER CODE BEGINS
 
                     {
-                        arv = terreno.retiraArvoreAmbiente();
+                        arv = ter.retiraArvoreAmbiente();
                     }
                      // OMP USER CODE ENDS
                      }
@@ -231,7 +236,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                          // OMP USER CODE BEGINS
 
                         {
-                            terreno.setArvoreFotossintese(arv);
+                            ter.setArvoreFotossintese(arv);
                         }
                          // OMP USER CODE ENDS
                          }
@@ -256,7 +261,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                      // OMP USER CODE BEGINS
 
                     {
-                        arv = terreno.retiraArvoreFotossintese();
+                        arv = ter.retiraArvoreFotossintese();
                     }
                      // OMP USER CODE ENDS
                      }
@@ -269,7 +274,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                          // OMP USER CODE BEGINS
 
                         {
-                            terreno.setArvoreAmbiente(arv);
+                            ter.setArvoreAmbiente(arv);
                         }
                          // OMP USER CODE ENDS
                          }
