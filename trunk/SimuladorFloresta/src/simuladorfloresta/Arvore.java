@@ -108,7 +108,7 @@ public abstract class Arvore {
         String saida = "";
         int qtdfolhas = 0;
         saida += this.etapa.toString() + "\n";
-        saida += Integer.toString(this.tamanho) + "\n";
+        saida += "Tamanho: " + Integer.toString(this.tamanho) + "\n";
         saida += "Qtd. Galhos: " + Integer.toString(galhos.size()) + "\n";
         for (Galho galho : galhos) {
             qtdfolhas += galho.getQtdFolhas();

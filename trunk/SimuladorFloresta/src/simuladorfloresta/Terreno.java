@@ -59,10 +59,12 @@ public class Terreno {
         //Verifica-se se a arvore do terreno é a mesma passada por parametros.
         //Essa verificação é necessária pois em alguns momentos, a arvore do terreno
         //pode morrer, e outro processo pode tentar matar a mesma arvore
-        if(arvore == null)
+        if (arvore == null) {
             System.out.println("nula");
-        if(arvore.isMorta())
+        }
+        if (arvore.isMorta()) {
             return true;
+        }
         if (arvore.equals(arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()])) {
             arvores[arvore.getPosicao().getX()][arvore.getPosicao().getY()] = null;
             this.numArvores--;
@@ -75,8 +77,7 @@ public class Terreno {
     }
 
     public synchronized void addArvoreCorte(Arvore arvore) {
-        if(arvore.isMorta())
-        {
+        if (arvore.isMorta()) {
             System.out.println("Arvore Nula - addArvoreCorte");
             return;
         }
@@ -94,7 +95,7 @@ public class Terreno {
             }
         }
         Object obj = arvoresCorte.poll();
-        if(obj instanceof Arvore){
+        if (obj instanceof Arvore) {
             return (Arvore) obj;
         } else {
             return null;
@@ -179,14 +180,14 @@ public class Terreno {
     public ArrayList getArvoresEtapa(EnumEtapaProcesso etapa) {
         OMP.setNumThreads(10);
         ArrayList arvoresRetorno = new ArrayList();
-        
-        //omp parallel shared(arvoresRetorno)
+
+        //xomp parallel shared(arvoresRetorno)
         {
-            //omp for
+            //xomp for
             for (int i = 0; i < arvores.length; i++) {
                 for (int j = 0; j < arvores[0].length; j++) {
                     if (arvores[i][j] != null && arvores[i][j].getEtapa() == etapa) {
-                        //omp critical
+                        //xomp critical
                         {
                             arvoresRetorno.add(arvores[i][j]);
                         }
@@ -198,17 +199,17 @@ public class Terreno {
     }
 
     public ArrayList getArvoresEtapa() {
-        
+
         ArrayList arvoresRetorno = new ArrayList();
-        
+
         OMP.setNumThreads(10);
-        //omp parallel shared(arvoresRetorno)
+        //xomp parallel shared(arvoresRetorno)
         {
-            //omp for
+            //xomp for
             for (int i = 0; i < arvores.length; i++) {
                 for (int j = 0; j < arvores[0].length; j++) {
                     if (arvores[i][j] != null) {
-                        //omp critical
+                        //xomp critical
                         {
                             arvoresRetorno.add(arvores[i][j]);
                         }
@@ -220,17 +221,17 @@ public class Terreno {
     }
 
     Arvore retiraArvoreAmbiente() {
-        return (Arvore)arvoresAmbiente.poll();
+        return (Arvore) arvoresAmbiente.poll();
     }
 
     Arvore retiraArvoreFotossintese() {
-        return (Arvore)arvoresFotossintese.poll();
+        return (Arvore) arvoresFotossintese.poll();
     }
 
     void setArvoreAmbiente(Arvore arv) {
         arvoresAmbiente.add(arv);
     }
-    
+
     public int CarregaArvoresDisponiveis() {
         Queue saida = new ArrayDeque();
         int numeroArvores = 0;
@@ -245,12 +246,13 @@ public class Terreno {
         this.arvoresAmbiente = saida;
         return numeroArvores;
     }
+
     public int CarregaArvoresDisponiveisOMP() {
-        Queue saida = new ArrayDeque();
+        ArrayDeque saida = new ArrayDeque();
         int numeroArvores = 0;
-        
+
         OMP.setNumThreads(arvores.length);
-        
+
         //omp parallel reduction(+:numeroArvores)
         {
             int myId = OMP.getThreadNum();
@@ -264,7 +266,7 @@ public class Terreno {
                 }
             }
         }
-        
+
         this.arvoresAmbiente = saida;
         return numeroArvores;
     }

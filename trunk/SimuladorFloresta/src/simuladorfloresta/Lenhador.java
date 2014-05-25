@@ -14,10 +14,10 @@ public class Lenhador extends Thread {
     public void run() {
         try {
             while (!finalizado) {
-                Arvore arvore = Terreno.getInstancia().retiraArvoreCorte();
+                Arvore arvore = Terreno_jomp.getInstancia().retiraArvoreCorte();
                 if (arvore != null) {
                     Thread.sleep(10);
-                    if (Terreno.getInstancia().killArvore(arvore)) {
+                    if (Terreno_jomp.getInstancia().killArvore(arvore)) {
                         numArvoresCortadas++;
                         System.out.println(this.nomeLenhador + " cortou arvore \n" + arvore.ImprimeDados()
                                 + "Arvores cortadas: " + numArvoresCortadas + "\n");
