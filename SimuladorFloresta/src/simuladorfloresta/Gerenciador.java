@@ -83,7 +83,7 @@ public class Gerenciador {
         x("1");
         int numArvoresProcessadas = 0;
         x("1.5");
-        int numArvores = ter.CarregaArvoresDisponiveisOMP();
+        int numArvores = ter.CarregaArvoresDisponiveis();
         x("2");
         boolean finalizou;
         int numCiclos = numArvores * Gerenciador.NUM_CLICOS_DIA;
@@ -194,6 +194,6 @@ public class Gerenciador {
     
     private void x(String x)
     {
-        //System.out.println(x);
+        System.out.println(x);
     }
 }
