@@ -27,6 +27,15 @@ public abstract class Arvore {
     private int saisFotossintese;
     private ArrayList<Galho> galhos;
     private EnumEtapaProcesso etapa;
+    private boolean morta;
+
+    public boolean isMorta() {
+        return morta;
+    }
+
+    public void setMorta(boolean morta) {
+        this.morta = morta;
+    }
 
     public Arvore(int tamanhoMax,
             int raioMax,
