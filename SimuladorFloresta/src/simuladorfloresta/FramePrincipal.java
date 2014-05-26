@@ -22,7 +22,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         txtLarguraTerreno.setText("2");
         txtComprimentoTerreno.setText("100");
         txtNumeroArvores.setText("200");
-        txtNumeroDias.setText("300");
+        txtNumeroDias.setText("10");
         verificaNumMaxArvores();
     }
 
