@@ -83,7 +83,7 @@ public class Gerenciador {
         x("1");
         int numArvoresProcessadas = 0;
         x("1.5");
-        int numArvores = ter.CarregaArvoresDisponiveis();
+        int numArvores = ter.CarregaArvoresDisponiveisOMP();
         x("2");
         boolean finalizou;
         int numCiclos = numArvores * Gerenciador.NUM_CLICOS_DIA;
@@ -96,12 +96,13 @@ public class Gerenciador {
             //omp section
             {
                 Arvore arv;
-                while (numArvoresProcessadas++ < numCiclos) {
+                while (numArvoresProcessadas < numCiclos) {
                     //omp critical
                     {
                         arv = ter.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
+                        numArvoresProcessadas++;
                         Ambiente.Processa(arv);
                         //omp critical
                         {

@@ -96,12 +96,13 @@ public class Gerenciador_jomp {
             //omp section
             {
                 Arvore arv;
-                while (numArvoresProcessadas++ < numCiclos) {
+                while (numArvoresProcessadas < numCiclos) {
                     //omp critical
                     {
                         arv = ter.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
+                        numArvoresProcessadas++;
                         Ambiente.Processa(arv);
                         //omp critical
                         {

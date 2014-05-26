@@ -12,15 +12,15 @@ public class Ambiente {
     }
 
     private static int getAgua() {
-        return getRandom(0, 10);
+        return getRandom(10, 20);
     }
 
     private static int getLuz() {
-        return getRandom(0, 10);
+        return getRandom(10, 20);
     }
 
     private static int getSaisMinerais() {
-        return getRandom(0, 10);
+        return getRandom(10, 20);
     }
 
     private static int getRandom(int min, int max) {
