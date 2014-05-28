@@ -89,7 +89,7 @@ public class Gerenciador {
         int numCiclos = numArvores * Gerenciador.NUM_CLICOS_DIA;
 
         x("3");
-        OMP.setNumThreads(2);
+        OMP.setNumThreads(20);
 
         //omp parallel sections
         {
@@ -136,7 +136,7 @@ public class Gerenciador {
         Armazem armBroto = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.BROTO));
         Armazem armAdulta = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.ADULTA));
         x("5");
-        Morte morte1 = new Morte(armMorte);
+        /*Morte morte1 = new Morte(armMorte);
         Morte morte2 = new Morte(armMorte);
         Morte morte3 = new Morte(armMorte);
 
@@ -150,9 +150,9 @@ public class Gerenciador {
 
         Adulta adulta1 = new Adulta(armAdulta);
         Adulta adulta2 = new Adulta(armAdulta);
-        Adulta adulta3 = new Adulta(armAdulta);
+        Adulta adulta3 = new Adulta(armAdulta);*/
 
-        morte1.start();
+        /*morte1.start();
         morte2.start();
         morte3.start();
 
@@ -182,7 +182,7 @@ public class Gerenciador {
 
         adulta1.join();
         adulta2.join();
-        adulta3.join();      
+        adulta3.join();*/      
     }
 
     public int getLarguraTerreno() {
