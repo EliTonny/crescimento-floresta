@@ -6,7 +6,7 @@ import simuladorfloresta.Armazem;
 import simuladorfloresta.Arvore;
 import simuladorfloresta.Terreno_jomp;
 
-public abstract class Etapa extends Thread {
+public abstract class Etapa {
 
     private Armazem armazem;
     private Terreno_jomp terreno;
@@ -22,7 +22,6 @@ public abstract class Etapa extends Thread {
 
     public abstract void executar(Arvore arvore);
 
-    @Override
     public void run() {
         while (armazem.getHaElementos().tryAcquire()) {
             try {

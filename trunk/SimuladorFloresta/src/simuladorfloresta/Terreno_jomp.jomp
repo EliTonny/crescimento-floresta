@@ -178,16 +178,16 @@ public class Terreno_jomp {
     }
 
     public ArrayList getArvoresEtapa(EnumEtapaProcesso etapa) {
-        OMP.setNumThreads(10);
+        OMP.setNumThreads(20);
         ArrayList arvoresRetorno = new ArrayList();
 
-        //xomp parallel shared(arvoresRetorno)
+        //omp parallel shared(arvoresRetorno)
         {
-            //xomp for
+            //omp for
             for (int i = 0; i < arvores.length; i++) {
                 for (int j = 0; j < arvores[0].length; j++) {
                     if (arvores[i][j] != null && arvores[i][j].getEtapa() == etapa) {
-                        //xomp critical
+                        //omp critical
                         {
                             arvoresRetorno.add(arvores[i][j]);
                         }
@@ -202,14 +202,14 @@ public class Terreno_jomp {
 
         ArrayList arvoresRetorno = new ArrayList();
 
-        OMP.setNumThreads(10);
-        //xomp parallel shared(arvoresRetorno)
+        OMP.setNumThreads(20);
+        //omp parallel shared(arvoresRetorno)
         {
-            //xomp for
+            //omp for
             for (int i = 0; i < arvores.length; i++) {
                 for (int j = 0; j < arvores[0].length; j++) {
                     if (arvores[i][j] != null) {
-                        //xomp critical
+                        //omp critical
                         {
                             arvoresRetorno.add(arvores[i][j]);
                         }

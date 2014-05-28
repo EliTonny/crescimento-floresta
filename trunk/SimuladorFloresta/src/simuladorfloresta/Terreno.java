@@ -177,17 +177,17 @@ public class Terreno {
         return saida;
     }
 
-    public ArrayList getArvoresEtapa(EnumEtapaProcesso etapa) {
-        OMP.setNumThreads(10);
+    public ArrayList getArvoresEtapa(EnumEtapaProcesso etapa) throws InterruptedException {
+        OMP.setNumThreads(20);
         ArrayList arvoresRetorno = new ArrayList();
 
-        //xomp parallel shared(arvoresRetorno)
+        //omp parallel shared(arvoresRetorno)
         {
-            //xomp for
+            //omp for
             for (int i = 0; i < arvores.length; i++) {
                 for (int j = 0; j < arvores[0].length; j++) {
                     if (arvores[i][j] != null && arvores[i][j].getEtapa() == etapa) {
-                        //xomp critical
+                        //omp critical
                         {
                             arvoresRetorno.add(arvores[i][j]);
                         }
@@ -195,21 +195,23 @@ public class Terreno {
                 }
             }
         }
+        Thread.sleep(3000);
+        
         return arvoresRetorno;
     }
 
-    public ArrayList getArvoresEtapa() {
+    public ArrayList getArvoresEtapa() throws InterruptedException {
 
         ArrayList arvoresRetorno = new ArrayList();
 
-        OMP.setNumThreads(10);
-        //xomp parallel shared(arvoresRetorno)
+        OMP.setNumThreads(20);
+        //omp parallel shared(arvoresRetorno)
         {
-            //xomp for
+            //omp for
             for (int i = 0; i < arvores.length; i++) {
                 for (int j = 0; j < arvores[0].length; j++) {
                     if (arvores[i][j] != null) {
-                        //xomp critical
+                        //omp critical
                         {
                             arvoresRetorno.add(arvores[i][j]);
                         }
@@ -217,6 +219,7 @@ public class Terreno {
                 }
             }
         }
+        Thread.sleep(3000);
         return arvoresRetorno;
     }
 
@@ -247,7 +250,7 @@ public class Terreno {
         return numeroArvores;
     }
 
-    public int CarregaArvoresDisponiveisOMP() {
+    public int CarregaArvoresDisponiveisOMP() throws InterruptedException {
         ArrayDeque saida = new ArrayDeque();
         int numeroArvores = 0;
 
@@ -266,6 +269,7 @@ public class Terreno {
                 }
             }
         }
+        Thread.sleep(3000);
 
         this.arvoresAmbiente = saida;
         return numeroArvores;
