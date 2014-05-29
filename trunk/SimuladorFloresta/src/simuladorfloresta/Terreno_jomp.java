@@ -313,7 +313,17 @@ private class __omp_Class8 extends jomp.runtime.BusyTask {
             for (int i = 0; i < arvores[myId].length; i++) {
                 if (arvores[myId][i] != null) {
                     numeroArvores++;
-                    saida.add(arvores[myId][i]);
+                     // OMP CRITICAL BLOCK BEGINS
+                     synchronized (jomp.runtime.OMP.getLockByName("")) {
+                     // OMP USER CODE BEGINS
+
+                    {
+                        saida.add(arvores[myId][i]);
+                    }
+                     // OMP USER CODE ENDS
+                     }
+                     // OMP CRITICAL BLOCK ENDS
+
                 }
             }
             System.out.println("Fim monta Carrega Arvores");
