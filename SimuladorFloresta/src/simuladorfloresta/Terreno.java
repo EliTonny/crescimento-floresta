@@ -267,6 +267,7 @@ public class Terreno {
             for (int i = 0; i < arvores[myId].length; i++) {
                 if (arvores[myId][i] != null) {
                     numeroArvores++;
+                    saida.add(arvores[myId][i]);
                 }
             }
             System.out.println("Fim monta Carrega Arvores");

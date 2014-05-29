@@ -84,18 +84,21 @@ public class Gerenciador_jomp {
         boolean finalizou;
         int numCiclos = numArvores * Gerenciador_jomp.NUM_CLICOS_DIA;
         OMP.setNumThreads(20);
+        System.out.println("Numero de arvores que serão processadas: " + numArvores);
         //omp parallel sections
         {
             //omp section
             {
                 System.out.println("Ambiente");
                 Arvore arv;
+                int contador = 0;
                 while (numArvoresProcessadas < numCiclos) {
                     //omp critical
                     {
                         arv = ter.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
+                        System.out.println("Ambiente processou arvore numero " + contador++);
                         numArvoresProcessadas++;
                         Ambiente.Processa(arv);
                         //omp critical
@@ -111,12 +114,14 @@ public class Gerenciador_jomp {
             {
                 System.out.println("Fotossintese");
                 Arvore arv;
+                int contador = 0;
                 while (!finalizou) {
                     //omp critical
                     {
                         arv = ter.retiraArvoreFotossintese();
                     }
                     if (arv != null) {
+                        System.out.println("Fotossintese processou arvore numero " + contador++);
                         Fotossintese.Processa(arv);
                         //omp critical
                         {
