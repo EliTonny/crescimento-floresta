@@ -85,6 +85,7 @@ public class Gerenciador_jomp {
         boolean finalizou;
         int numCiclos = numArvores * Gerenciador_jomp.NUM_CLICOS_DIA;
         OMP.setNumThreads(20);
+        System.out.println("Numero de arvores que ser\u00e3o processadas: " + numArvores);
 
 // OMP PARALLEL BLOCK BEGINS
 {
@@ -212,6 +213,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
             {
                 System.out.println("Ambiente");
                 Arvore arv;
+                int contador = 0;
                 while (numArvoresProcessadas < numCiclos) {
                      // OMP CRITICAL BLOCK BEGINS
                      synchronized (jomp.runtime.OMP.getLockByName("")) {
@@ -225,6 +227,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                      // OMP CRITICAL BLOCK ENDS
 
                     if (arv != null) {
+                        System.out.println("Ambiente processou arvore numero " + contador++);
                         numArvoresProcessadas++;
                         Ambiente.Processa(arv);
                          // OMP CRITICAL BLOCK BEGINS
@@ -253,6 +256,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
             {
                 System.out.println("Fotossintese");
                 Arvore arv;
+                int contador = 0;
                 while (!finalizou) {
                      // OMP CRITICAL BLOCK BEGINS
                      synchronized (jomp.runtime.OMP.getLockByName("")) {
@@ -266,6 +270,7 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
                      // OMP CRITICAL BLOCK ENDS
 
                     if (arv != null) {
+                        System.out.println("Fotossintese processou arvore numero " + contador++);
                         Fotossintese.Processa(arv);
                          // OMP CRITICAL BLOCK BEGINS
                          synchronized (jomp.runtime.OMP.getLockByName("")) {

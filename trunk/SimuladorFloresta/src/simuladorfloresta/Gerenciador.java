@@ -91,12 +91,14 @@ public class Gerenciador {
             {
                 System.out.println("Ambiente");
                 Arvore arv;
+                int contador = 0;
                 while (numArvoresProcessadas < numCiclos) {
                     //omp critical
                     {
                         arv = ter.retiraArvoreAmbiente();
                     }
                     if (arv != null) {
+                        System.out.println("Ambiente processou arvore numero " + contador++);
                         numArvoresProcessadas++;
                         Ambiente.Processa(arv);
                         //omp critical
@@ -112,12 +114,14 @@ public class Gerenciador {
             {
                 System.out.println("Fotossintese");
                 Arvore arv;
+                int contador = 0;
                 while (!finalizou) {
                     //omp critical
                     {
                         arv = ter.retiraArvoreFotossintese();
                     }
                     if (arv != null) {
+                        System.out.println("Fotossintese processou arvore numero " + contador++);
                         Fotossintese.Processa(arv);
                         //omp critical
                         {
