@@ -178,7 +178,7 @@ public class Terreno_jomp {
         return saida;
     }
 
-    public ArrayList getArvoresEtapa(EnumEtapaProcesso etapa) {
+    public ArrayList getArvoresEtapa(EnumEtapaProcesso etapa) throws InterruptedException {
         OMP.setNumThreads(20);
         ArrayList arvoresRetorno = new ArrayList();
 
@@ -202,10 +202,12 @@ public class Terreno_jomp {
 }
 // OMP PARALLEL BLOCK ENDS
 
+        Thread.sleep(3000);
+
         return arvoresRetorno;
     }
 
-    public ArrayList getArvoresEtapa() {
+    public ArrayList getArvoresEtapa() throws InterruptedException {
 
         ArrayList arvoresRetorno = new ArrayList();
 
@@ -229,6 +231,7 @@ public class Terreno_jomp {
 }
 // OMP PARALLEL BLOCK ENDS
 
+        Thread.sleep(3000);
         return arvoresRetorno;
     }
 
@@ -259,7 +262,7 @@ public class Terreno_jomp {
         return numeroArvores;
     }
 
-    public int CarregaArvoresDisponiveisOMP() {
+    public int CarregaArvoresDisponiveisOMP() throws InterruptedException {
         ArrayDeque saida = new ArrayDeque();
         int numeroArvores = 0;
 
@@ -284,6 +287,7 @@ public class Terreno_jomp {
 }
 // OMP PARALLEL BLOCK ENDS
 
+        Thread.sleep(3000);
 
         this.arvoresAmbiente = saida;
         return numeroArvores;
@@ -308,20 +312,10 @@ private class __omp_Class8 extends jomp.runtime.BusyTask {
             int myId = OMP.getThreadNum();
             for (int i = 0; i < arvores[myId].length; i++) {
                 if (arvores[myId][i] != null) {
-                     // OMP CRITICAL BLOCK BEGINS
-                     synchronized (jomp.runtime.OMP.getLockByName("")) {
-                     // OMP USER CODE BEGINS
-
-                    {
-                        saida.add(arvores[myId][i]);
-                    }
-                     // OMP USER CODE ENDS
-                     }
-                     // OMP CRITICAL BLOCK ENDS
-
                     numeroArvores++;
                 }
             }
+            System.out.println("Fim monta Carrega Arvores");
         }
     // OMP USER CODE ENDS
   // call reducer
@@ -417,6 +411,7 @@ private class __omp_Class4 extends jomp.runtime.BusyTask {
              }
              } // OMP FOR BLOCK ENDS
 
+            System.out.println("Fim barrier arvores etapa2");
         }
     // OMP USER CODE ENDS
   // call reducer
@@ -511,6 +506,10 @@ private class __omp_Class0 extends jomp.runtime.BusyTask {
              }
              } // OMP FOR BLOCK ENDS
 
+            //xomp barrier
+            {
+                System.out.println("Fim barrier arvores etapa1");
+            }
         }
     // OMP USER CODE ENDS
   // call reducer
