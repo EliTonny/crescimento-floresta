@@ -79,22 +79,17 @@ public class Gerenciador {
     }
 
     private void ProximoDia() throws Exception {
-
-        x("1");
         int numArvoresProcessadas = 0;
-        x("1.5");
         int numArvores = ter.CarregaArvoresDisponiveisOMP();
-        x("2");
         boolean finalizou;
         int numCiclos = numArvores * Gerenciador.NUM_CLICOS_DIA;
-
-        x("3");
         OMP.setNumThreads(20);
-
+        System.out.println("Numero de arvores que serão processadas: " + numArvores);
         //omp parallel sections
         {
             //omp section
             {
+                System.out.println("Ambiente");
                 Arvore arv;
                 while (numArvoresProcessadas < numCiclos) {
                     //omp critical
@@ -111,9 +106,11 @@ public class Gerenciador {
                     }
                 }
                 finalizou = true;
+                System.out.println("Fim ambiente");
             }
             //omp section
             {
+                System.out.println("Fotossintese");
                 Arvore arv;
                 while (!finalizou) {
                     //omp critical
@@ -128,61 +125,63 @@ public class Gerenciador {
                         }
                     }
                 }
+                System.out.println("Fim fotossintese");
             }
         }
-        x("4");
+
+        System.out.println("Fim ambiente e fotossintese");
+        Thread.sleep(3000);
         Armazem armMorte = new Armazem(ter.getArvoresEtapa());
         Armazem armSemente = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.SEMENTE));
         Armazem armBroto = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.BROTO));
         Armazem armAdulta = new Armazem(ter.getArvoresEtapa(EnumEtapaProcesso.ADULTA));
-        x("5");
         /*Morte morte1 = new Morte(armMorte);
-        Morte morte2 = new Morte(armMorte);
-        Morte morte3 = new Morte(armMorte);
+         Morte morte2 = new Morte(armMorte);
+         Morte morte3 = new Morte(armMorte);
 
-        Semente semente1 = new Semente(armSemente);
-        Semente semente2 = new Semente(armSemente);
-        Semente semente3 = new Semente(armSemente);
+         Semente semente1 = new Semente(armSemente);
+         Semente semente2 = new Semente(armSemente);
+         Semente semente3 = new Semente(armSemente);
 
-        Broto broto1 = new Broto(armBroto);
-        Broto broto2 = new Broto(armBroto);
-        Broto broto3 = new Broto(armBroto);
+         Broto broto1 = new Broto(armBroto);
+         Broto broto2 = new Broto(armBroto);
+         Broto broto3 = new Broto(armBroto);
 
-        Adulta adulta1 = new Adulta(armAdulta);
-        Adulta adulta2 = new Adulta(armAdulta);
-        Adulta adulta3 = new Adulta(armAdulta);*/
+         Adulta adulta1 = new Adulta(armAdulta);
+         Adulta adulta2 = new Adulta(armAdulta);
+         Adulta adulta3 = new Adulta(armAdulta);*/
 
         /*morte1.start();
-        morte2.start();
-        morte3.start();
+         morte2.start();
+         morte3.start();
 
-        semente1.start();
-        semente2.start();
-        semente3.start();
+         semente1.start();
+         semente2.start();
+         semente3.start();
 
-        broto1.start();
-        broto2.start();
-        broto3.start();
+         broto1.start();
+         broto2.start();
+         broto3.start();
 
-        adulta1.start();
-        adulta2.start();
-        adulta3.start();
+         adulta1.start();
+         adulta2.start();
+         adulta3.start();
 
-        morte1.join();
-        morte2.join();
-        morte3.join();
+         morte1.join();
+         morte2.join();
+         morte3.join();
 
-        semente1.join();
-        semente2.join();
-        semente3.join();
+         semente1.join();
+         semente2.join();
+         semente3.join();
 
-        broto1.join();
-        broto2.join();
-        broto3.join();
+         broto1.join();
+         broto2.join();
+         broto3.join();
 
-        adulta1.join();
-        adulta2.join();
-        adulta3.join();*/      
+         adulta1.join();
+         adulta2.join();
+         adulta3.join();*/
     }
 
     public int getLarguraTerreno() {
@@ -192,9 +191,8 @@ public class Gerenciador {
     public int getComprimentoTerreno() {
         return comprimentoTerreno;
     }
-    
-    private void x(String x)
-    {
+
+    private void x(String x) {
         System.out.println(x);
     }
 }

@@ -194,9 +194,13 @@ public class Terreno {
                     }
                 }
             }
+            //xomp barrier
+            {
+                System.out.println("Fim barrier arvores etapa1");
+            }
         }
         Thread.sleep(3000);
-        
+
         return arvoresRetorno;
     }
 
@@ -218,6 +222,7 @@ public class Terreno {
                     }
                 }
             }
+            System.out.println("Fim barrier arvores etapa2");
         }
         Thread.sleep(3000);
         return arvoresRetorno;
@@ -261,13 +266,10 @@ public class Terreno {
             int myId = OMP.getThreadNum();
             for (int i = 0; i < arvores[myId].length; i++) {
                 if (arvores[myId][i] != null) {
-                    //omp critical
-                    {
-                        saida.add(arvores[myId][i]);
-                    }
                     numeroArvores++;
                 }
             }
+            System.out.println("Fim monta Carrega Arvores");
         }
         Thread.sleep(3000);
 
